@@ -1,8 +1,0 @@
-1. 도커의 기초 - https://github.com/skarltjr/Memory_Write_Record/issues/21
-2. 서버를 구축하는 방식
-   - 크게 2가지의 방식이 존재한다
-   1) onpremise = 자체적으로 데이터센터나 서버실을 운영하는 것
-   2) 클라우드 = 클라우드 사업자 ( aws , gcp , azuer...)등을 사용하는 방식
-   - 서비스 환경에 따라 선택
-   
-   
