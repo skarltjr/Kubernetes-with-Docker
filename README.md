@@ -5,4 +5,3 @@
 
 
 - todo : 도커와 쿠버네티스 그리고 스프링부트를 활용한 간단 서비스를 MSA로 만들어보기 
-  https://taes-k.github.io/2019/06/16/spring-msa-3/
