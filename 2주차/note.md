@@ -224,17 +224,33 @@ sudo docker rename apache apache_server
 ```
 
 **11) `cp` - 컨테이너 내부 파일 복사**
-
+- 위에서 봤듯이 현재 apache컨테이너로 띄운 웹 서버에 접속하면 it works!라는 문구가 나온다
+- 이 문구를 봐꿔보고 싶은데...
 ```bash
 sudo docker container cp apache:/usr/local/apache2/htdocs/index.html /tmp/index.html
+먼저 아파치컨테이너의:~~/index.html파일을 컨테이너 내부말고 지금 내 우분투 서버 내부 tmp에 복사해오고
 ```
+- cat을 통해 문자열로만 확인해보면 
+- ![화면 캡처 2021-08-11 221433](https://user-images.githubusercontent.com/62214428/129035176-97749b89-05fd-43a3-a72f-97699a949665.png)
+- 이제 그냥 cd로 tmp찾아가보면 index.html파일이 있고 그걸 수정한 후 아까랑 !!반대로 내 우분투에 있는 index.html을 아파치컨테이너 내부 apache:/usr/local/apache2/htdocs/index.html에 복사해주면 끝! 변경! 
+- ![화면 캡처 2021-08-11 221824](https://user-images.githubusercontent.com/62214428/129035846-30b0a441-048a-46a2-861b-290940a78c3e.png)
+- ![화면 캡처 2021-08-11 221836](https://user-images.githubusercontent.com/62214428/129035857-40a4da1f-7643-42c3-81a8-6f8b44a767b2.png)
 
 ```bash
 sudo docker container cp /tmp/index.html apache:/usr/local/apache2/htdocs/index.html
 ```
+- ![화면 캡처 2021-08-11 221939](https://user-images.githubusercontent.com/62214428/129035992-919fe623-9d55-4021-b7fa-cadab450dc38.png)
 
 **12) `diff` - 컨테이너 변경 사항 확인**
-
+- 바로 위 상황이후 확인해보면 
+- different / diff 
+- A (added) / D (deleted) / C (changed) 
 ```bash
 sudo docker diff apache
 ```
+
+--------------
+참고로 대화형 컨테이너와 백그라운드 컨테이너의 차이, 용도는
+- 대화형 컨테이너의 경우 Bash Shell을 컨테이너 내부에서 직접 사용해야 하는 경우, 웹 서버 로그를 실시간으로 봐야하는 경우, 리소스 모니터를 실시간으로 해야하는 경우 등에 사용됩니다.
+- 백그라운드 컨테이너는 레지스트리용 컨테이너를 실행하거나 웹 서버를 구동하는 등 대부분의 경우에 사용합니다.
+- 일반적으로 사용자는 컨테이너가 실행되는 모습을 지켜보는 것이 아니라 로그를 통해 에러 등 기타 이슈를 파악하기 때문에  백그라운드의 형태로 구동합니다.
