@@ -144,8 +144,8 @@ sudo docker container stop apache
 **3) `start` - 컨테이너 시작**
 
 - 옵션
-
-    [start](https://www.notion.so/829c899fcba34fdcaee4bba0a40faf00)
+--detach, -d	컨테이너 생성 후 백그라운드에서 실행한다.
+--interactive , -i	표준 입력창을 엽니다.
 
 ```bash
 sudo docker container start apache
@@ -160,8 +160,8 @@ sudo docker container restart apache
 **5) `stats` - 컨테이너 구동 확인**
 
 - 옵션
-
-    [stats](https://www.notion.so/90f8a935dd654a829693f5ee4cae2338)
+--all, -a	실행/중지 된 모든 컨테이너의 상태를 확인합니다.
+--format	출력 포맷을 설정합니다.
 
 ```bash
 sudo docker container stats apache
@@ -173,40 +173,50 @@ sudo docker container stats apache --format "table {{.Container}}\t{{.CPUPerc}}\
 
 **6) `ls` - 컨테이너 목록 조회**
 
-- 옵션
-
-    [stats](https://www.notion.so/8be5605cf3064c9e9f5c6d07b1c1cbd1)
-
 ```bash
 sudo docker container ls
 ```
 
 **7) `attach` - 구동 중인 컨테이너 연결**
-
+- 백그라운드로 현재 apache서버를 구동 중 
 ```bash
 sudo docker container attach apache
 ```
+- 현재 백그라운드로 구동중인 컨테이너에 붙을 수 있는데
+- attach 실행 후 다시 접속해보면 로그가 프롬프트에 남는것을 확인할 수 있다
+![화면 캡처 2021-08-11 214913](https://user-images.githubusercontent.com/62214428/129031412-4bda84d9-862f-46ea-87e7-e4edfe530ac6.png)
+- 주의할 점 : 여기서 ctrl+c로 종료를 하는데 이 때 !! 컨테이너도 함께 종료된다. 이 점을 고려하고 행동할 것 
+
 
 **8) `exec` - 구동 중인 컨테이너에서 프로세스 실행**
 
 - 옵션
+- --detach, -d	컨테이너 생성 후 백그라운드에서 실행한다.
+- --interactive , -i	표준 입력창을 엽니다.
+- --tty , -t	장치에 tty를 할당합니다.
+- --user, -u	컨테이너 실행 시, 사용자명이나  지정합니다.
 
-    [exec](https://www.notion.so/5d9799fcfdbb4023910950a5c7abe23a)
-
+- 현재 apache 컨테이너가 동작 중 
 ```bash
 sudo docker container exec -it apache /bin/echo "Hello, Docker!"
 ```
+![화면 캡처 2021-08-11 215521](https://user-images.githubusercontent.com/62214428/129032290-08cebe60-3f05-4c74-bf38-dbddf9d6edbd.png)
 
 ```bash
 sudo docker container exec -it apache bash
 ```
+![화면 캡처 2021-08-11 215632](https://user-images.githubusercontent.com/62214428/129032482-90d986d2-7022-40e0-97c0-384f4ce50252.png)
+- 즉 외부에서 컨테이너 내부 프로세스를 실행하는 방법
 
 **9) `top` - 컨테이너 내부에서 구동 중인 프로세스 확인**
-
+- 현재 apache컨테이너가 백그라운드로 실행 중
+- 백그라운드로 실행되기 때문에 외부에선 어떻게 진행되는지 모른다
+- 그래서 내부에서 실행중인 프로세스를 확인하고자 할 때 
 ```bash
 sudo docker container top apache
 ```
-
+- ![화면 캡처 2021-08-11 220407](https://user-images.githubusercontent.com/62214428/129033634-18e1227a-dc64-48d7-92df-6dbb06273f34.png)
+- 보면 아 이 컨테이너 내부에서 httpd라는 웹 서버가 돌고 있구나를 알 수 있다.
 **10) `rename` - 컨테이너 이름 변경** 
 
 ```bash
