@@ -80,6 +80,9 @@ sudo docker container run -it --name centos centos:latest
 
 ```bash
 sudo docker container run -d -p 80:80 --name apache httpd:latest
+참고로 도커 컨테이너는 네트워킹을 위해 내부에서 사설 IP를 할당받는다 ( NAT ) 그래서 추가로
+sudo docker container run -d -p 8080:80 --name apache httpd:latest 을 하더라도 
+두 컨테이너는 사실 내부 ip가 다르고 각 ip의 80포트로 연결되는 것 
 ```
 
 - 옵션
