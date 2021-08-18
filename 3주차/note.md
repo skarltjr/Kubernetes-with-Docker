@@ -118,6 +118,7 @@ sudo docker container commit -a "ggingmin" apache ggingmin/apacheweb:1.0
 sudo docker container export apache > apache.tar
 
 sudo docker container export 컨테이너명 > [경로/]파일명
+위는 경로지정을 안했기때문에 루트에 저장된다.
 ```
 
 `export` 역시 `container` 와 함께 사용되는 명령어. 
@@ -126,5 +127,76 @@ sudo docker container export 컨테이너명 > [경로/]파일명
 **8) `import` - 파일을 이미지로 생성**
 
 ```bash
-sudo docker image import apache.tar ggingmin/apacheweb:1.1
+sudo docker image import apache.tar kiseok/kiseok-apache2:1.0
 ```
+![화면 캡처 2021-08-18 225645](https://user-images.githubusercontent.com/62214428/129911259-b58ac686-3e71-4c3f-bf66-8410682152a3.png)
+
+## 4.3 Dockerfile
+![화면 캡처 2021-08-18 233801](https://user-images.githubusercontent.com/62214428/129918197-49bc83bf-f2fd-494e-8d74-7d53aae76cff.png)
+Dockerfile은 새로운 이미지를 빌드하는 데에 필요한 이미지와 설정들을 작성한 파일...! 어떤 이미지를 사용할지, 어떤 포트를 열어놓을지 등에 대해서 정의가 완료되면 이 내용을 Dockerfile의 양식에 맞게 작성하기만 하면 된다. 
+```docker
+FROM ubuntu:18.04
+
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install nginx
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+위 명령은 ubuntu에 nginx 웹서버를 설치하고 80 포트를 열어놓는 내용을 담고 있다. 이 파일의 내용을 기반으로 빌드가 진행되면 그 결과물로 새로운 이미지가 나오게 된다. Dockerfile로 인프라를 사전에 빌드해 놓는다면 어플리케이션 개발자는 이를 받아서 컨테이너를 실행하기만 하면 되니 매우 간편
+
+![화면 캡처 2021-08-18 233935](https://user-images.githubusercontent.com/62214428/129918496-12a2c504-2dfd-403e-992a-8c49b1b27bac.png)
+FROM 으로 시작되는 명령어에서는 베이스 이미지를 설정. 이후 실행되는 명령은 모두 이 베이스 이미지를 기반으로 실행.베이스 이미지는 보통 OS와 관련
+
+![화면 캡처 2021-08-18 233944](https://user-images.githubusercontent.com/62214428/129918659-1bd4dc9d-bb13-492d-8a3b-6e808b8f8bd9.png)
+각각의 명령줄은 하나의 이미지 레이어를 구성. 즉, 각 명령 스텝별로 이미지가 생성되는 것. 이 과정에서 생성되는 중간 이미지는 캐싱되어 다른 이미지를 생성할 때도 사용. 
+
+Dockerfile에서 사용할 수 있는 명령어는 용도에 따라 아주 다양합니다. 작성 시 대소문자의 구분은 없으나 통상 대문자로 작성하게 됩니다. 그러면 위의 Dockerfile이 각각 어떤 작업을 수행하는지 나눠서 보겠습니다.
+
+```docker
+FROM ubuntu:18.04
+```
+
+FROM 절은 베이스 이미지를 세팅. 빌드할 이미지의 베이스를 'ubuntu'로 설정한다는 의미. 여기까지만 본다면 ubuntu의 이미지를 그대로 복제한 것과 같다.
+
+```docker
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install nginx
+```
+
+RUN 절은 이미지를 생성에 필요한 미들웨어나 어플리케이션을 세팅하기 위한 명령을 실행. 여기서는 `apt-get` 명령어를 통해 'nginx'를 설치. 
+
+```docker
+EXPOSE 80
+```
+
+'nginx' 웹서버를 통해 외부와 통신하기 위해서는 기본적으로 포트가 열려있어야 한다. HTTP 방식의 통신을 위해 '80'번 포트를 열어주었다. 포트는 역할별로 지정되어 있는 것들이 있는데, 이는 하나의 약속으로 이메일을 송수신 하거나 서버 접속방식 등에 포트가 할당 되어있습니다.
+
+```docker
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+nginx 설치 및 포트설정이 완료된 후에는 웹서버를 구동. CMD 명령은 생성된 이미지를 기반으로 구동된 컨테이너에서 명령을 실행하는 것이며, 하나의 Dockerfile에서 한 번의 명령만 유효. 복수의 CMD 명령이 있을 경우 마지막 CMD 명령만 실행.
+
+여기까지 웹서버 구축을 위한 Dockerfile 예시 /  실제로 컨테이너를 띄우려면 빌드의 과정이 필요
+
+즉 도커파일을 작성한 상태 -> 이제 이 도커파일을 바탕으로 이미지를 만드는 "빌드"할 차례
+
+### 2.3.3 Dockerfile 빌드
+
+'빌드' 라는 용어는 프로그래밍 전방위에서 접하게 됩니다. '모바일 앱을 빌드한다.', '스프링 프로젝트를 빌드한다.' 등등 소스 코드를 컴파일 한다는 의미로 주로 사용되죠. 도커에서 빌드는 Dockerfile을 기반으로 이미지를 생성한다는 의미를 가지고 있습니다. 위에서 작성한 Dockerfile을 기반으로 이미지를 만들어 봅시다.
+
+```bash
+mkdir docker && cd docker
+touch Dockerfile
+vi Dockerfile
+```
+
+Dockerfile을 생성한 후, nano 혹은 vi를 통해 위에서 확인했던 명령어를 작성.
+
+```bash
+sudo docker build -t sample:1.0 /home/(USER)/docker
+```
+![화면 캡처 2021-08-18 234634](https://user-images.githubusercontent.com/62214428/129919711-7ce5e164-f472-42a2-853f-216dfc055fa5.png)
