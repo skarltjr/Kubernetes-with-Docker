@@ -164,6 +164,7 @@ FROM 절은 베이스 이미지를 세팅. 빌드할 이미지의 베이스를 '
 ```docker
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install nginx
+참고로 여기서 RUN은 이미지를 만드는 명령어 / 즉 컨테이너 생성 후 run과는 관계없는 것 / 이미지를 만드는 한 단계 한 단계를 위한 명령어
 ```
 
 RUN 절은 이미지를 생성에 필요한 미들웨어나 어플리케이션을 세팅하기 위한 명령을 실행. 여기서는 `apt-get` 명령어를 통해 'nginx'를 설치. 
