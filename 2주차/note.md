@@ -84,6 +84,7 @@ sudo docker container run -d -p 80:80 --name apache httpd:latest
 sudo docker container run -d -p 8080:80 --name apache httpd:latest 을 하더라도 
 두 컨테이너는 사실 내부 ip가 다르고 각 ip의 80포트로 연결되는 것 
 ```
+- <img width="833" alt="Screen Shot 2021-08-18 at 2 25 46 PM" src="https://user-images.githubusercontent.com/62214428/129842183-b7666d2d-1a63-4e5f-8e8e-a806289c0b28.png">
 
 - 옵션
 
