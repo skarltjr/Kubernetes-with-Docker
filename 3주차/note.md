@@ -309,3 +309,15 @@ sudo docker container run -it hellodocker 'Hi, Docker!'
 - 여기서 `ENTRYPOINT ["/bin/echo"]`는 무조건 수행하려고 하는 명령어  
 - 반면 `CMD ["Hello, Docker!"]`는 `sudo docker container run -it hellodocker 'Hi, Docker!'`처럼 변경해도 되는 경우에 적용
 
+**5) `ONBUILD` - 이미지 빌드가 완료된 후에 실행되는 명령**
+
+- 1) 여기선 우선 base (parent) 이미지를 생성 Dockerfile
+- <img width="887" alt="Screen Shot 2021-08-19 at 1 36 14 PM" src="https://user-images.githubusercontent.com/62214428/130008772-b733e30a-2e7d-4fcd-baa2-6605a528fc75.png">
+- <img width="771" alt="Screen Shot 2021-08-19 at 1 51 32 PM" src="https://user-images.githubusercontent.com/62214428/130009799-435565ff-cc76-4887-a60e-58cc9b9a28ef.png">
+
+
+
+- 2) 자식 이미지를 생성 : 이 때 자식 도커파일 Dockerfile.child의 베이스를 parent 이미지 ( base:1.0 )으로  Dockerfile.child
+- <img width="262" alt="Screen Shot 2021-08-19 at 1 45 37 PM" src="https://user-images.githubusercontent.com/62214428/130009255-b4fbe887-78a7-4f3b-a284-7588cab2d0f2.png">
+- <img width="624" alt="Screen Shot 2021-08-19 at 1 54 06 PM" src="https://user-images.githubusercontent.com/62214428/130010034-98488502-e481-48c6-adf0-06a10822fc8a.png">
+
