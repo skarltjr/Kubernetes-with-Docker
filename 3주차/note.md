@@ -201,3 +201,111 @@ Dockerfile을 생성한 후, nano 혹은 vi를 통해 위에서 확인했던 명
 sudo docker build -t sample:1.0 /home/(USER)/docker
 ```
 ![화면 캡처 2021-08-18 234634](https://user-images.githubusercontent.com/62214428/129919711-7ce5e164-f472-42a2-853f-216dfc055fa5.png)
+
+`sudo docker build -t` 는 도커 이미지를 생성하기 위한 기본 명령어 입니다. `sample:1.0` 은 태그라고 부르는데 이름표를 붙인다고 생각하시면 되고 `[이미지명]:[버전]` 의 형태로 작성합니다. 마지막 부분에는 경로를 입력하며, Dockerfile이 있는 경로로 이동해서 현재 경로를 나타내는 `.` 를 사용하거나 절대 경로, 상대 경로를 입력하는 것 모두 가능합니다.
+
+
+## 4.4 Dockerfile 명령어
+- Dockerfile 명령어
+    - `FROM`	베이스 이미지를 할당합니다.
+    - `RUN`	이미지를 생성하기 위한 명령을 실행합니다.
+    - `CMD`	컨테이너 내부에서 명령을 실행합니다.
+    - `LABEL`	라벨을 설정합니다.
+    - `EXPOSE`	포트를 할당합니다.
+    - `ENV`	환경변수를 설정합니다.
+    - `ADD`	파일 혹은 디렉토리를 추가합니다.
+    - `COPY`	파일을 복사합니다.
+    - `ENTRYPOINT`	컨테이너 내부에서 명령을 실행합니다.
+    - `VOLUME`	볼륨을 마운트합니다.
+    - `USER`	특정 사용자를 지정합니다.
+    - `WORKDIR`	작업할 디렉토리를 세팅합니다.
+    - `ARG`	Dockerfile 내부의 변수를 설정합니다.
+    - `ONBUILD`	빌드가 완료된 후 명령을 실행합니다.
+    - `STOPSIGNAL`	시스템 콜 시그널을 설정합니다.
+    - `HEALTHCHECK`	컨테이너의 상태를 체크합니다.
+    - `SHELL`	컨테이너에서 사용할 기본 쉘을 설정합니다.
+
+**) 전반적인 과정을 먼저 살펴보면 
+- 1) dockerfile 작성 
+    - <img width="837" alt="Screen Shot 2021-08-19 at 9 29 01 AM" src="https://user-images.githubusercontent.com/62214428/129989046-16b0b54c-16d2-41c0-b151-e7d201084daa.png">
+- 2) 작성한 도커파일을 기반으로 이미지 생성
+    - <img width="891" alt="Screen Shot 2021-08-19 at 9 29 58 AM" src="https://user-images.githubusercontent.com/62214428/129989111-120669c0-7be5-4674-9b0c-a86f5f3c552b.png">
+- 3) 생성한 이미지를 통해 run
+    - <img width="649" alt="Screen Shot 2021-08-19 at 9 33 12 AM" src="https://user-images.githubusercontent.com/62214428/129989385-96aa8275-f803-4f32-9fc4-a3a99acd07ef.png">
+    - <img width="2560" alt="Screen Shot 2021-08-19 at 9 33 39 AM" src="https://user-images.githubusercontent.com/62214428/129989449-205b409a-a9e5-47cf-ab95-91ab8307f01a.png">
+
+
+
+
+----------
+
+
+**1) `FROM` - 베이스 이미지 설정**
+
+```docker
+FROM ubuntu:bionic // 18.04
+```
+베이스 이미지를 세팅하는 명령으로서 기본적으로 Docker Hub에서 이미지를 탐색해 빌드에 사용. 하지만 상황에 따라 사용자가 직접 만든 베이스 이미지를 통해 빌드하는 경우도 있다.
+
+**2) `RUN` - 이미지를 빌드할 때 실행할 명령 설정**
+- 참고로 다시 말하지만 여기서 RUN은 이미지를 빌드할 때 !! 컨테이너가 생성되기 전!!
+
+```docker
+RUN apt-get -y update                          # Shell 형식
+RUN ["/bin/bash", "-c", "apt-get -y update"]   # Exec 형식
+```
+`RUN` 을 통해 작동하는 명령은 아직 컨테이너가 작동하는 상태가 아니다. 베이스 이미지에 추가적으로 명령을 실행해 필요한 패키지나 미들웨어를 설치하기 위해 많이 사용.
+
+명령은 위 예시처럼 Shell 형식, 혹은 Exec 형식으로 작성할 수 있다. Shell 형식에서 `RUN` 뒤에 바로 명령어를 작성하는 것은 `/bin/sh -c` 이 붙어있는 것과 마찬가지라고 이해.
+
+두 가지가 혼용되는 경우가 많지만 실행할 셸 혹은 프로그램을 지정한다는 측면에서 Exec 형식이 권장.
+
+**3) `CMD` - 이미지를 통해 생성된 컨테이너 내부에서 실행되는 명령**
+- RUN이 이미지를 빌드할 때 ! 라면 cmd는 컨테이너가 생성된 후 ! 컨테이너 내부에서 실행될 명령어
+
+```docker
+FROM ubuntu:18.04
+
+CMD echo "Hello, Docker!"             # Shell 형식
+CMD ["/bin/echo", "Hello, Docker!"]   # Exec 형식
+```
+
+컨테이너는 `docker container run` 명령어를 통해 실행됩니다. 이렇게 컨테이너가 실행될 때 수행할 명령은 `CMD` 를 통해 세팅이 가능. 유의할 점은 Dockerfile 전체에서 `CMD` 명령은 단 하나만 유효하고, 여러 개의 명령이 있다면 마지막 것만 실행이 된다는 점.
+
+`CMD` 명령 역시 `RUN` 과 같이 Shell, Exec 형식 모두 사용 가능.
+
+**4) `ENTRYPOINT` - 이미지를 통해 생성된 컨테이너 내부에서 실행되는 명령**
+- CMD와 역할은 같지만 동작방식!!!이 다르다 
+- cmd는 변경될 수 있는 사항에 적용 // 컨테이너가 생성되고 변경할 수 있는 내용에 사용
+- entrypoint는 무조건 이대로 동작해야하는 경우 // 디폴트를 설정할 때 
+
+
+```docker
+FROM ubuntu:18.04
+
+ENTRYPOINT echo "Hello, Docker!"             # Shell 형식
+ENTRYPOINT ["/bin/echo", "Hello, Docker!"]   # Exec 형식
+```
+
+뭔가 이상한데... 라는 생각과 함께 위에 `CMD` 명령을 다시 올려다보셨을 겁니다. `ENTRYPOINT` 의 역할이 `CMD` 와 같게 쓰여져 있기 때문이죠. 실제로 이 둘은 컨테이너가 실행된 후 그 내부에서 명령을 실행한다는 동일한 기능을 가지고 있습니다. 하지만 이 둘 사이에는 중요한 차이점이 있습니다. 다음의 명령을 함께 보겠습니다.
+
+```docker
+FROM ubuntu:18.04
+
+ENTRYPOINT ["/bin/echo"]
+CMD ["Hello, Docker!"]
+```
+
+```bash
+sudo docker image build -t hellodocker .
+sudo docker container run -it hellodocker
+sudo docker container run -it hellodocker 'Hi, Docker!'
+```
+
+<img width="785" alt="Screen Shot 2021-08-19 at 9 25 02 AM" src="https://user-images.githubusercontent.com/62214428/129988786-ac9d3cba-4a13-4617-9227-e111634d6890.png">
+
+`ENTRYPOINT` 의 명령은 사용자가 어떤 인수를 명령으로 넘기더라도 Dockerfile에 명시된 명령을 그대로 실행. 반면 `CMD` 는 컨테이너를 실행할 때 사용자가 인수를 넘기면 기존에 작성된 내용을 덮어 쓴다. 이러한 특성을 이해한다면 좀 더 효율적인 이미지 생성이 가능.
+
+- 여기서 `ENTRYPOINT ["/bin/echo"]`는 무조건 수행하려고 하는 명령어  
+- 반면 `CMD ["Hello, Docker!"]`는 `sudo docker container run -it hellodocker 'Hi, Docker!'`처럼 변경해도 되는 경우에 적용
+
