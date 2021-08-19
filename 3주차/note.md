@@ -321,3 +321,111 @@ sudo docker container run -it hellodocker 'Hi, Docker!'
 - <img width="262" alt="Screen Shot 2021-08-19 at 1 45 37 PM" src="https://user-images.githubusercontent.com/62214428/130009255-b4fbe887-78a7-4f3b-a284-7588cab2d0f2.png">
 - <img width="624" alt="Screen Shot 2021-08-19 at 1 54 06 PM" src="https://user-images.githubusercontent.com/62214428/130010034-98488502-e481-48c6-adf0-06a10822fc8a.png">
 
+
+**6) `HEALTHCHECK` - 컨테이너의 작동상태 체크**
+
+- 옵션
+--interval	컨테이너 체크 간격을 설정합니다.
+--timeout	설정한 시간에 정상작동 하지 않으면 타임아웃 처리합니다.
+--retries	재시도 횟수를 설정합니다.
+```docker
+# ./docker/Dockerfile
+FROM httpd
+
+RUN ["apt-get", "update"]
+RUN ["apt-get", "-y", "install", "curl"]
+
+HEALTHCHECK --interval=3s --timeout=5s --retries=3 CMD curl --fail http://localhost:80/ || exit 1
+```
+
+```bash
+sudo docker image build -t web-healthcheck .
+```
+
+```bash
+sudo docker container run -d -p 80:80 --name=apache-hc web-healthcheck
+```
+컨테이너를 작동시킬 때, 이 컨테이너가 정상적으로 작동하고 있는지 체크를 해야하는 경우가 있습니다. Dockerfile을 작성할 때 `HEALTHCHECK` 명령을 추가하면 이를 컨테이너 내부에 로그로 남길 수 있습니다. 컨테이너에서 이 명령어가 잘 작동하는지는 `docker ps` 명령어를 통해 `STATUS` 항목을 살펴보면 됩니다. 구동 시간 옆에 (healthy) 라는 문구가 보입니다. 더 정확하게 로그를 보려면 `docker container inspect <컨테이너명>` 을 통해 "Health" 에 해당하는 값을 확인하면 됩니다.
+
+**7) `ENV` - 환경변수 설정**
+
+**8) `WORKDIR` - 작업 디렉토리 할당**
+
+![화면 캡처 2021-08-19 223212](https://user-images.githubusercontent.com/62214428/130077496-16c84989-f12e-4ecb-a57a-8723b371f65e.png)
+
+- 순서대로 살펴보면 `ENV DIRPARENT /parent`를 보면 /루트하위 parent폴더를 지정 DIRPARENT란 이름으로  
+- 그럼 현재 루트하위 parent폴더 내부 
+- `ENV DIRCHILD child`으로 parent폴더 내부에 child폴더 지정
+- `WORKDIR $DIRPARENT/$DIRCHILD` -> $(환경변수)를 통해 작업할 디렉토리를 직접 지정 -> 여기선 그럼 루트 하위 parent/child 내부에서 동작
+- expect 컨테이너 실행해보면 parent/child폴더 내부일것
+- ![화면 캡처 2021-08-19 223942](https://user-images.githubusercontent.com/62214428/130078691-44b53dbe-b176-47f6-8af3-4dae81dda48c.png)
+- 추가로 연습한 내용은 child 내부에 hello.txt파일 생성까지
+- ![화면 캡처 2021-08-19 224323](https://user-images.githubusercontent.com/62214428/130079272-a74639bc-8fdc-4b4d-aa71-28e99230dd78.png)
+- ![화면 캡처 2021-08-19 224307](https://user-images.githubusercontent.com/62214428/130079290-d38e39fd-6f05-47b4-baeb-cbd7065d4607.png)
+
+환경변수를 설정하고 이를 이용해 작업 경로를 세팅하였는데, `ENV` 에서 설정된 환경변수는 `RUN`, `CMD`, `ENTRYPOINT` 명령에서 모두 사용 가능. 선언된 환경변수를 사용하기 위해서는 `$` 
+
+`WORKDIR` 는 리눅스의 `cd` 와 유사. Dockerfile 내부에서 경로를 이동할 때도 쓰일 뿐만 아니라, 이렇게 빌드된 이미지를 대화형 컨테이너로 실행할 때 프롬프트의 최초 위치를 결정.
+
+**9) `USER` - 유저 할당**
+
+**10) `LABEL` - 이미지 버전 정보, 작성자 등 레이블 정보 등록**
+
+**11) `ARG` - Dockerfile 내부의 변수 할당**
+
+![image](https://user-images.githubusercontent.com/62214428/130079693-ece804e9-8564-4948-aa9f-a06460792907.png)
+- 순서대로 살펴보면 
+- `label`은 정보를 표기하기 위함으로 inspect로 살펴볼 수 있다.
+- `ARG`는 변수선언으로 볼 수 있다. `ARG MESSAGE="complete"`로 MESSAGE라는 변수를 생성했고 마지막에 `RUN echo $MESSAGE` $변수 -> complete라는 메세지가 출력된다.
+- `sudo docker image inspect 해당이미지` 를 통해 확인해보면 
+- ![화면 캡처 2021-08-19 225023](https://user-images.githubusercontent.com/62214428/130080341-f90c525a-6db9-4540-9644-0a3951c343fe.png)
+- 해당 이미지로 컨테이너를 띄워서 유저를 확인해보면
+- ![화면 캡처 2021-08-19 225119](https://user-images.githubusercontent.com/62214428/130080535-8d4912e2-959b-4e65-a90b-753fcf0c59af.png)
+
+
+**12) `EXPOSE` - 포트 번호 설정**
+
+```docker
+# ./docker/Dockerfile
+
+FROM ubuntu:18.04
+
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install nginx
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+```bash
+sudo docker image build -t web-server .
+sudo docker container run -d -p 80:80 --name=web-server web-server
+```
+
+앞서 컨테이너로 웹서버를 띄우는 실습을 진행할 때 포트를 명령어에 같이 작성해주었던 기억이 납니다. 이미지에 포트를 작성하면 따로 컨테이너 실행 시에 `-p` 옵션으로 포트를 지정할 필요가 없는걸까요?
+
+결론부터 말씀드리면 이미지에 작성된 `EXPOSE` 명령어는 단순히 문서의 성격만 가집니다. 실제로 호스트에서 컨테이너의 포트와 통신하도록 listening 상태를 만들어주지 않습니다. 외부로 포트가 노출되지 않는 것이죠. 그저 이미지를 빌드하고 컨테이너를 실행하는 개발자에게 어떤 포트로 어떤 방식을 이용해야 하는지 알려줄 뿐입니다. 컨테이너에서 호스트의 통신 요청에 응답하기 위해서는 반드시 `container run` 단계에서 `-p` 옵션을 통해 포트를 설정해주어야 합니다.
+
+**13) `ADD` - 파일 복사(URL 포함)**
+
+**14) `COPY` - 파일 복사**
+- 기본적으로 copy는 현재 도커엔진이 작동하는 // 나의 경우 내 노트북 우분투에 있는 파일을 이미지로 옮긴다
+- add는 추가적으로 url을 통해서도 수행이 가능하지만 보통 copy를 많이쓰고 안전
+- 현재 내 우분투에 index.html이라는 파일 하나 생성
+- ![화면 캡처 2021-08-19 225358](https://user-images.githubusercontent.com/62214428/130081001-ea356e64-f49b-45d3-a04a-29457c50e909.png)
+- 이 후 도커파일 빌드
+- ![화면 캡처 2021-08-19 225440](https://user-images.githubusercontent.com/62214428/130081083-2807f053-b5ef-4e30-a5d0-f31fcb5af491.png)
+- 1) 도커파일을 보면 `WORKDIR /html`을 통해 루트 하위에 html폴더 지정(없으면 생성해서)   `ADD index.html .`를 통해 index.html을 추가 -> 컨테이너 동작시켜서 ls로 확인해보기
+- 2) `WORKDIR /inside-htmlCOPY`  `index.html .` 동일하게 확인해보기
+- ![화면 캡처 2021-08-19 225730](https://user-images.githubusercontent.com/62214428/130081647-8f4d86ee-87e3-4307-966d-d0db5150cad2.png)
+- ![화면 캡처 2021-08-19 225759](https://user-images.githubusercontent.com/62214428/130081657-e9e1d286-fbc3-4ebe-9860-e33f3eaab3d9.png)
+
+`ADD`와 `COPY` 는 Dockerfile이 위치한 경로에 있는 파일을 이미지로 복사해오는 명령어 입니다. 겉보기에는 기능상에 큰 차이가 없어 보이고 위의 결과도 그렇게 보이는 듯 합니다. 하지만 `ADD` 추가적으로 두 가지의 기능을 가지고 있습니다.
+
+1. URL을 통한 파일 복사
+2. 로컬에서 압축파일 복사 시, 해제하여 복사
+    - 웹에서 받은 압축파일은 압축해제만 되고 tar 형태는 유지됨
+
+로컬에 있는 파일 뿐만 아니라 웹상에 있는 파일도 이미지를 빌드할 당시에 추가할 수 있는 것입니다. 또한 압축을 자동으로 해제하기 때문에 `tar`나 `tar.gz` 을 복사하는 경우 유의해야 합니다.
+
