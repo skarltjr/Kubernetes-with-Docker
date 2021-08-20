@@ -453,6 +453,8 @@ sudo docker container run -d -p 80:80 --name=web-server web-server
 - 6) 근데 적용이 안된다. 더 알아보자
    - 아래처럼 다른 점이 많았다. 이미지를 통해 nginx를 띄웠을 땐 index.html변경하고 적용이 되었지만 apt-get으론 적용 x
    - 여러 파일이 달랐으며 우분투 기반의 nginx는 /etc/nginx/conf.d/default.conf파일조차 없었고 
+   - 또한 이미지를 받아 컨테이너를 실행시킨 경우 nginx의 index.html을 로컬의 index.html로 갈아끼웠을 땐 동작
+   - 우분투에 nginx 설치한 경우만 잘 동작안하는 것 같다
 ```
 location / {
         root   /usr/share/nginx/html;
