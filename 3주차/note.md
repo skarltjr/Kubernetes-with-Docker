@@ -443,4 +443,11 @@ sudo docker container run -d -p 80:80 --name=web-server web-server
 - <img width="2560" alt="Screen Shot 2021-08-20 at 10 59 12 AM" src="https://user-images.githubusercontent.com/62214428/130167181-46f300bf-8031-4ec4-87f4-8f40e28cd841.png">
 
 그런데 이 내용을 컨테이너를 띄운 후가 아닌 이미지로 미리 구성해서 동작시킬 순 없을까?
-- 1) 그래서 nginx의 기본 index.html을 로컬에 index.html
+- 1) 그래서 nginx의 기본 index.html을 로컬에 index.html copy `sudo docker container cp nginx:/usr/share/nginx/html/index.html /Users/etrisodas2/Desktop/docker/index.html`
+- 2) 로컬에서 내용변경 후 index.html저장 근데 이 때 readonly여서 :w!로 저장했다.
+- 3) <img width="429" alt="Screen Shot 2021-08-20 at 11 28 11 AM" src="https://user-images.githubusercontent.com/62214428/130169708-b0e17948-9fa1-49aa-9823-91e9ff1ba80c.png">
+- 4) 로컬의 index.html 
+- 5) expect : 로컬 index.html을 컨테이너의 index.html로 복사했으니 동일할 것 
+     - <img width="839" alt="Screen Shot 2021-08-20 at 11 31 35 AM" src="https://user-images.githubusercontent.com/62214428/130170009-d48aa00d-4643-4263-84f8-1f908a4b281e.png">
+- 6) 근데 적용이 안된다. 더 알아보자
+
