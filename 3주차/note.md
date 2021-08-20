@@ -443,4 +443,4 @@ sudo docker container run -d -p 80:80 --name=web-server web-server
 - <img width="2560" alt="Screen Shot 2021-08-20 at 10 59 12 AM" src="https://user-images.githubusercontent.com/62214428/130167181-46f300bf-8031-4ec4-87f4-8f40e28cd841.png">
 
 그런데 이 내용을 컨테이너를 띄운 후가 아닌 이미지로 미리 구성해서 동작시킬 순 없을까?
-- 
+- 1) 그래서 nginx의 기본 index.html을 로컬에 index.html
