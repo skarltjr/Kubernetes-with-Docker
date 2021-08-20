@@ -447,6 +447,7 @@ sudo docker container run -d -p 80:80 --name=web-server web-server
 - 2) 로컬에서 내용변경 후 index.html저장 근데 이 때 readonly여서 :w!로 저장했다.
 - 3) <img width="429" alt="Screen Shot 2021-08-20 at 11 28 11 AM" src="https://user-images.githubusercontent.com/62214428/130169708-b0e17948-9fa1-49aa-9823-91e9ff1ba80c.png">
 - 4) 로컬의 index.html 
+     - <img width="680" alt="Screen Shot 2021-08-20 at 11 30 52 AM" src="https://user-images.githubusercontent.com/62214428/130170054-535727fa-5272-433a-b51e-91a0514c66d6.png">
 - 5) expect : 로컬 index.html을 컨테이너의 index.html로 복사했으니 동일할 것 
      - <img width="839" alt="Screen Shot 2021-08-20 at 11 31 35 AM" src="https://user-images.githubusercontent.com/62214428/130170009-d48aa00d-4643-4263-84f8-1f908a4b281e.png">
 - 6) 근데 적용이 안된다. 더 알아보자
