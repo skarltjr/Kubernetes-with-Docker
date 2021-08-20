@@ -452,3 +452,24 @@ sudo docker container run -d -p 80:80 --name=web-server web-server
      - <img width="839" alt="Screen Shot 2021-08-20 at 11 31 35 AM" src="https://user-images.githubusercontent.com/62214428/130170009-d48aa00d-4643-4263-84f8-1f908a4b281e.png">
 - 6) 근데 적용이 안된다. 더 알아보자
 
+------ 
+
+위 사항을 진행하면서 알게된 것 
+`sudo docker container run -d -p 81:80 --name nginx nginx:latest`로 설치한 nginx와 
+`apt-get install nginx`로 설치한 nginx는 어떤 차이가 있을까?
+- nginx이미지를 통한 빌드는 기본적으로 debian이라는 리눅스 운영체제가 기분이다.
+
+``` bash
+Nginx Dockerfile
+FROM debian:buster-slim
+
+LABEL maintainer="NGINX Docker Maintainers <docker-maint@nginx.com>"
+
+ENV NGINX_VERSION   1.21.1
+ENV NJS_VERSION     0.6.1
+ENV PKG_RELEASE     1~buster
+...
+(하략)
+```
+- 반면 apt-get install nginx 는 Ubuntu 리눅스를 베이스로 하여 새로운 이미지를 빌드해야 하거나, 그 자체를 컨테이너로 실행하는 경우 수동으로 설치를 해주기 위한 명령어
+- 따라서 당연히 전체적인 서비스의 컨테이너 설계에 따라 약간의 차이가 생긴다. // 나같은 경우 내부 파일을 확인해 본 결과 조금씩 달랐다.
