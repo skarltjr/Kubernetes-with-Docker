@@ -451,7 +451,15 @@ sudo docker container run -d -p 80:80 --name=web-server web-server
 - 5) expect : 로컬 index.html을 컨테이너의 index.html로 복사했으니 동일할 것 
      - <img width="839" alt="Screen Shot 2021-08-20 at 11 31 35 AM" src="https://user-images.githubusercontent.com/62214428/130170009-d48aa00d-4643-4263-84f8-1f908a4b281e.png">
 - 6) 근데 적용이 안된다. 더 알아보자
-
+   - 아래처럼 다른 점이 많았다. 이미지를 통해 nginx를 띄웠을 땐 index.html변경하고 적용이 되었지만 apt-get으론 적용 x
+   - 여러 파일이 달랐으며 우분투 기반의 nginx는 /etc/nginx/conf.d/default.conf파일조차 없었고 
+```
+location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+}
+```
+   - 해당사항을 확인할 수도 없었다.
 ------ 
 
 위 사항을 진행하면서 알게된 것 
