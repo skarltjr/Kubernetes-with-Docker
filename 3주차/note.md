@@ -429,3 +429,18 @@ sudo docker container run -d -p 80:80 --name=web-server web-server
 
 로컬에 있는 파일 뿐만 아니라 웹상에 있는 파일도 이미지를 빌드할 당시에 추가할 수 있는 것입니다. 또한 압축을 자동으로 해제하기 때문에 `tar`나 `tar.gz` 을 복사하는 경우 유의해야 합니다.
 
+
+
+------
+
+활용해보기
+- nginx를 도커로 실행하되 처음 페이지의 문구를 바꿀 순 없을까?
+- 1) sudo docker container run -d -p 80:80 nginx nginx:latest 
+- 2) 동작중인 nginx 컨테이너 cli 접속 
+- 3) /usr/share/nginx/html/index.html을 사실 못 연다
+- 4) vim을 먼저 설치해줘야했다. apt-get -y install update & apt-get install -y vim
+- 5) vi index.html  --> index.html문구 변경
+- <img width="2560" alt="Screen Shot 2021-08-20 at 10 59 12 AM" src="https://user-images.githubusercontent.com/62214428/130167181-46f300bf-8031-4ec4-87f4-8f40e28cd841.png">
+
+그런데 이 내용을 컨테이너를 띄운 후가 아닌 이미지로 미리 구성해서 동작시킬 순 없을까?
+- 
