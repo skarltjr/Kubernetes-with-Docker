@@ -40,10 +40,45 @@ Dockerfile을 통해 빌드된 이미지가 컨테이너를 실행하는 데에 
 필요에 따라 테스트 서버를 동적으로 생성할 수 있음
 
 
+지금부터 하고자 하는 것 : 이미지 파일을 저장하는 레지스트리에 이미지 파일을 저장하기
 
+------------
 
+## 5.1 도커 허브
+도커 허브는 도커에서 디폴트로 참조하는 레지스트리로서, 각종 공식 이미지를 손쉽게 사용할 수 있도록 구성되어 있다. 
 
+### 먼저 레포지토리 생성
+![화면 캡처 2021-08-29 151050](https://user-images.githubusercontent.com/62214428/131240591-d1dbdb91-44e9-45ca-93f1-b1e8ae19da33.png)
 
+### 우분투에서 도커 레지스트리에 올릴 이미지를 빌드 
+`sudo docker build -t <계정명>/<저장소명>:[태그명] .`  
+빌드 명령어는 규칙으로 잘 기억하자.
+![화면 캡처 2021-08-29 151211](https://user-images.githubusercontent.com/62214428/131240614-76053722-659d-4ae0-8b1c-c95faa784970.png)
+
+- 도커 파일은 아래처럼 구성
+![화면 캡처 2021-08-29 151348](https://user-images.githubusercontent.com/62214428/131240641-6bcce0ca-f8ad-42cd-907a-89d410b1e6ec.png)
+```
+FROM nginx:alpine
+# alpine은 경량화 리눅스 배포판 입니다. 
+# 도커 베이스 이미지로 alpine 리눅스를 활용하는 이유는 이미지 용량을 적게 차지할 뿐만 아니라 처리속도가 빠르다는 이점이 있기 때문입니다. 
+
+WORKDIR /usr/share/nginx/html
+# 이 경로는 nginx 웹서버의 index.html 파일이 위치한 곳입니다.
+# 브라우저를 통해 웹서버로 접근했을때 로드되는 페이지가 바로 이 곳을 참조하여 렌더링 되는 것입니다.
+
+RUN rm -rf ./*
+# 클론한 소스를 이미지에 복사하기 위해 기존 이미지 내의 파일을 전부 삭제합니다.
+
+COPY ./* ./
+# Dockerfile이 위치한 경로의 html, css, js 등의 파일을 이미지 내로 복사합니다.    // 도커파일이 위치한 경로의 모든 파일 ./*을 현재 WORKDIR 경로( ./ )로 
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# nginx 웹서버를 기동합니다.
+
+```
+### 만든 이미지를 푸쉬할 차례
+![화면 캡처 2021-08-29 151721](https://user-images.githubusercontent.com/62214428/131240693-a080ee18-3d9a-4629-9355-37f276ef4162.png)
+![화면 캡처 2021-08-29 151748](https://user-images.githubusercontent.com/62214428/131240704-558d39a2-e5fa-4e07-a207-c038ac4d5e9c.png)
 
 
 
