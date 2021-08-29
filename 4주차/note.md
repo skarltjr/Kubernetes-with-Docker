@@ -232,3 +232,5 @@ sudo docker push asia-northeast3-docker.pkg.dev/skarltjr-docker-registry/mydocke
 이 후 변경사항 푸쉬 후 확인해보면
 - ![화면 캡처 2021-08-29 213025](https://user-images.githubusercontent.com/62214428/131250382-853e48f6-769a-4340-adee-3c58cecfc899.png)
 
+참고로 클라우드 서비스 과금은 본인이 주의하기
+artifact registry는 500mb 무료 / cloud build api는 하루 2시간넘으면 과금
