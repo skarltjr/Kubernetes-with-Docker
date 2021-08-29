@@ -109,7 +109,7 @@ sudo docker tag <기존 이미지명>:[태그명] <레지스트리 컨테이너 
 ![화면 캡처 2021-08-29 155616](https://user-images.githubusercontent.com/62214428/131241568-19c33a98-80f4-4d7c-9470-136586262d4c.png)
 ![화면 캡처 2021-08-29 155638](https://user-images.githubusercontent.com/62214428/131241570-fd7c1662-3f74-4fcb-85cf-01401ccefd33.png)
 
-### 참고로 sudo docker tag <기존 이미지명>:[태그명] <레지스트리 컨테이너 IP>/<이미지명>:[태그명] 같은 양식은 반드시 지켜야 인식이 가능
+##### 참고로 sudo docker tag <기존 이미지명>:[태그명] <레지스트리 컨테이너 IP>/<이미지명>:[태그명] 같은 양식은 반드시 지켜야 인식이 가능
 
 **3) 이미지 공유**
 ![화면 캡처 2021-08-29 155745](https://user-images.githubusercontent.com/62214428/131241597-675a023b-b9af-4f11-a795-91a7bf0ddd00.png)
@@ -204,6 +204,6 @@ sudo docker push asia-northeast3-docker.pkg.dev/skarltjr-docker-registry/mydocke
 ```
 ![화면 캡처 2021-08-29 181616](https://user-images.githubusercontent.com/62214428/131245297-983bfe69-1f60-4b52-a42b-a7f3cfa4e2fe.png)
 
-### 이렇게 GCP 레지스트리에 나의 도커 이미지를 올려서 저장할 수 있다.
+#### 이렇게 GCP 레지스트리에 나의 도커 이미지를 올려서 저장할 수 있다.
 
 
