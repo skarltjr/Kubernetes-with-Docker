@@ -81,8 +81,129 @@ ENTRYPOINT ["nginx", "-g", "daemon off;"]
 ![화면 캡처 2021-08-29 151748](https://user-images.githubusercontent.com/62214428/131240704-558d39a2-e5fa-4e07-a207-c038ac4d5e9c.png)
 
 
+`여기까진 도커허브를 통해 이미지를 저장`
+
+----------
+
+## 5.2 로컬 레지스트리 구축
+`클라우드 서비스보다 더 보안이 필요한 경우 외부 레지스트리가 아닌 서버내 직접 레지스트리를 구성해서 사용하는 경우가 있다 그런 방법을 실습하자`
+`그러니까 서버 혹은 로컬에 직접 도커허브와 같은 레지스트리를 구성하는 경우`
+
+도커를 통해 실행되는 어플리케이션은 컨테이너 단위로 실행. 이미지가 저장되는 레지스트리 역시 컨테이너 상에 구축할 수 있는데, 이는 도커 회사에서 [Registry](https://hub.docker.com/_/registry) 라는 이름으로 제공하고 있다.
+
+**1) Registry 컨테이너 실행**
+- 먼저 레지스트리를 구성하기위해 레지스트리 컨테이너를 실행
+
+```bash
+sudo docker run -d -p 5000:5000 --restart always --name registry registry:2
+# --restart always의 경우 도커 엔진이 재시작되는 경우 자동으로 컨테이너를 재시작하도록 하는 옵션.
+```
+![화면 캡처 2021-08-29 155335](https://user-images.githubusercontent.com/62214428/131241497-69c935ff-7846-4b5d-837b-49bbe041d784.png)
+ 
+**2) 이미지 태깅**
+
+```bash
+sudo docker tag <기존 이미지명>:[태그명] <레지스트리 컨테이너 IP>/<이미지명>:[태그명]
+기존 이미지에 다른 이름을 붙여 현재 우분투 서버에서 동작중인 레지스트리 컨테이너에 저장해보기 위해 
+```
+![화면 캡처 2021-08-29 155616](https://user-images.githubusercontent.com/62214428/131241568-19c33a98-80f4-4d7c-9470-136586262d4c.png)
+![화면 캡처 2021-08-29 155638](https://user-images.githubusercontent.com/62214428/131241570-fd7c1662-3f74-4fcb-85cf-01401ccefd33.png)
+
+### 참고로 sudo docker tag <기존 이미지명>:[태그명] <레지스트리 컨테이너 IP>/<이미지명>:[태그명] 같은 양식은 반드시 지켜야 인식이 가능
+
+**3) 이미지 공유**
+![화면 캡처 2021-08-29 155745](https://user-images.githubusercontent.com/62214428/131241597-675a023b-b9af-4f11-a795-91a7bf0ddd00.png)
+
+- 그러면 현재 내 우분투에 로컬레지스트리가 컨테이너로 구동중이고 거기에 push를 통해 localhost:5000/mydocker:1.1이라는 이미지를 올려서 저장해두고 있다.
+- docker image ls로 확인해보면 현재는 이미지가 로컬에 있는데 이 이미지를 지우고 레지스트리 컨테이너에서 다시 받아올 수 있지 않을까?
+- ![화면 캡처 2021-08-29 155957](https://user-images.githubusercontent.com/62214428/131241650-529a910c-c7cb-49eb-9657-e9167d082cca.png)
 
 
+## 5.3 GCP Artifact Registry
 
+#### 도커허브 / 로컬 레지스트리 / 그리고 마지막으로 클라우드 레지스트리를 활용해보기
+
+- 기존에 사용하던 gcp계정이 있어서 난 그걸 사용
+**1) GCP Console 접근 및 프로젝트 생성**
+
+![화면 캡처 2021-08-29 180354](https://user-images.githubusercontent.com/62214428/131244956-5bced917-31f5-4af6-8439-802969385141.png)
+
+**2) 결제 계정 등록인데 이미 되어있으므로 ..**
+
+**3) 서비스 사용 등록**
+![화면 캡처 2021-08-29 180659](https://user-images.githubusercontent.com/62214428/131245063-5c120fcc-c22a-4e3d-b3e7-a5eb3ca0a550.png)
+
+**4) GCP 저장소 만들기**
+![화면 캡처 2021-08-29 180815](https://user-images.githubusercontent.com/62214428/131245090-a998b4e5-24e3-4397-a5da-d3330f3189e1.png)
+
+![화면 캡처 2021-08-29 180743](https://user-images.githubusercontent.com/62214428/131245078-d1f84d8c-0da5-4f6a-955e-be053db8c274.png)
+
+**5) 리눅스 도커 보안 그룹 설정**
+
+```bash
+sudo usermod -a -G docker [계정명]
+해당계정은 도커계정말하는거
+```
+**6) google cloud SDK 패키지 경로 추가**
+
+```bash
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+```
+- 패키지 소스 URI를 추가. 사용하려는 gcloud는 이 경로를 통해 내려받게 된다.
+
+
+**7) google cloud SDK 공개키 내려받기**
+
+```bash
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+```
+
+**8) google cloud SDK 설치**
+
+```bash
+sudo apt-get update && sudo apt-get install google-cloud-sdk
+```
+
+**9) google cloud SDK 초기화**
+
+```bash
+gcloud init
+```
+
+![화면 캡처 2021-08-29 181054](https://user-images.githubusercontent.com/62214428/131245154-fc0a3b4a-985e-49e5-97eb-c6ceaf2f69b1.png)
+- 빨간 부분을 크롬에 복사해서 접근하고 설정한 후 나오는 코드를 Enter verification code: 여기에 붙여넣으면 된다
+![화면 캡처 2021-08-29 181159](https://user-images.githubusercontent.com/62214428/131245174-4ae9f838-987f-4467-97ec-c99f020a4b89.png)
+- 사용하려는 레포지토리 선택
+
+**10) GCP Registry 저장소 인증**
+
+```bash
+sudo gcloud auth configure-docker asia-northeast3-docker.pkg.dev
+```
+
+**11) 이미지 태깅**
+
+```bash
+sudo docker tag skarltjr/mydocker:1.0 asia-northeast3-docker.pkg.dev/[프로젝트ID]/[저장소명]/mydocker(이건 그냥 저장소명과 동일하게)
+
+sudo docker tag skarltjr/mydocker:1.0 asia-northeast3-docker.pkg.dev/skarltjr-docker-registry/mydocker/mydocker
+```
+참고로 asia~~ 다 칠 필요없이
+![화면 캡처 2021-08-29 181414](https://user-images.githubusercontent.com/62214428/131245241-1409a987-108e-42a2-8b5a-29e8f64a0489.png)
+
+- 내 우분투에 만들어둔 이미지를 gcp 레지스트리에 올리기위해 따로 이름을 붙여준 부분이 바로 이 태깅이다
+- 이제 다음으로 이 이미지를 올리기위해 push
+
+**12) 이미지 공유**
+
+```bash
+sudo docker push asia-northeast3-docker.pkg.dev/[프로젝트ID]/[저장소명]/mydocker
+
+sudo docker push asia-northeast3-docker.pkg.dev/skarltjr-docker-registry/mydocker/mydocker
+보면 여기서 마지막에 mydocker이후 태그는 안붙여줬다 그럼 latest로 들어갈것
+```
+![화면 캡처 2021-08-29 181616](https://user-images.githubusercontent.com/62214428/131245297-983bfe69-1f60-4b52-a42b-a7f3cfa4e2fe.png)
+
+### 이렇게 GCP 레지스트리에 나의 도커 이미지를 올려서 저장할 수 있다.
 
 
