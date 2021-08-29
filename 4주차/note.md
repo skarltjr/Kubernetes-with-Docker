@@ -206,4 +206,29 @@ sudo docker push asia-northeast3-docker.pkg.dev/skarltjr-docker-registry/mydocke
 
 #### 이렇게 GCP 레지스트리에 나의 도커 이미지를 올려서 저장할 수 있다.
 
+----------
+
+### GCP에는 추가적인 기능이 있는데 바로 trigger
+- 이전에 GCP & 깃허브 webhook을 통해 레퍼지토리에 변경사항이 있으면 이를 반영하여 자동 배포화를 경험한적이있다.
+- 이미지도 동일하게 자동으로 변경사항을 반영하여 저장할 수 있다. 그 때 사용할 수 있는게 트리거
+- cloud build api & artifact registry를 사용으로
+
+- 먼저 깃허브 레포지토리와 연결
+- ![화면 캡처 2021-08-29 212504](https://user-images.githubusercontent.com/62214428/131250336-476343ff-26bd-4c85-a928-516a31f63a9d.png)
+- ![화면 캡처 2021-08-29 212549](https://user-images.githubusercontent.com/62214428/131250339-92408236-6e89-46a8-9f20-0db7809f28c2.png)
+- ![화면 캡처 2021-08-29 212607](https://user-images.githubusercontent.com/62214428/131250344-eea1769c-a0eb-43b2-afac-2db3e1bfa6cd.png)
+- ![화면 캡처 2021-08-29 212621](https://user-images.githubusercontent.com/62214428/131250347-a22154c2-3fcb-4eac-9f20-2cd8af303728.png)
+- ![화면 캡처 2021-08-29 212638](https://user-images.githubusercontent.com/62214428/131250350-e9be1877-7f2c-4380-b6e9-bb88cdac6874.png)
+
+
+- 이제 트리거를 만들 차례
+
+- ![화면 캡처 2021-08-29 212504](https://user-images.githubusercontent.com/62214428/131250257-83fab733-b388-4453-b87b-193bbcb693cd.png)
+
+
+참고로 아래 설정도 해줘야한다
+- ![화면 캡처 2021-08-29 212932](https://user-images.githubusercontent.com/62214428/131250367-07f0df3f-1b01-4c70-8b6f-d9dfaddd4d66.png)
+
+이 후 변경사항 푸쉬 후 확인해보면
+- ![화면 캡처 2021-08-29 213025](https://user-images.githubusercontent.com/62214428/131250382-853e48f6-769a-4340-adee-3c58cecfc899.png)
 
