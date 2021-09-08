@@ -64,11 +64,54 @@ HTTPS : 443**
     - `veth + 난수` 의 형태로 생성.
     - 구조도 내 컨테이너에 `eth0` 이라고 표시된 이유는 Host 입장이 아닌 컨테이너 입장에서 가상 NIC를 `eth0` 라고 인식하기 때문.
 
+### 6.1.2 도커 네트워크
+
+- 호스트와 컨테이너 간 네트워크의 작동 방식에 대해 살펴보다. 지금부터 알아볼 것은 컨테이너 간 네트워크 - 서비스는 보통 단일 컨테이너로만 이루어지지않기 때문에 컨테이너간 네트워크가 중요하다!!
+- 만약 API를 통해 데이터를 DB에 등록하려고 하는 서비스를 구축하는 경우, API 서버와 DBMS 서버를 각각 컨테이너에 구축. 컨테이너 생성 뿐만 아니라 이 두 컨테이너를 통신이 가능하도록 설정해주어야 한다.
 
 
+**1) `bridge`**
+![화면 캡처 2021-09-08 150654](https://user-images.githubusercontent.com/62214428/132455281-ab8ce27a-571d-47ae-9ce4-676ecdf18d4d.png)
+- 도커 엔진 내부에서 동작하는 `bridge` 네트워크는 위와 같이 구성. 
+- `docker0` 를 Gateway로 하여 컨테이너가 생성된 순서대로 IP가 부여. 
+- 기본적으로 컨테이너를 구동할 때 별도의 네트워크 설정을 하지 않으면 모두 이 `docker0`라는 `bridge` 네트워크에 연결. 
+- 같은 대역의 네트워크에 컨테이너가 구성되었기 때문에 통신도 서로 가능. 만약 커스터마이징한 별도의 `bridge` 네트워크를 구축해서 컨테이너를 구성한다면 기존의 `docker0`에 구성된 컨테이너와는 통신이 `불가능`.
+- 물리적인 스위치를 생각하면 좀더 이해가 쉽다. A 스위치와 B 스위치에 각각 구성된 디바이스는 당연히 통신을 할 수 없다. 도커에서는 `bridge` 네트워크가 물리적인 스위치 역할을 한다고 보면된다.
 
+**게이트웨이(Gateway)**
+네트워크에 접근하기 위한 출입구. 우리가 스마트폰과 노트북으로 와이파이에 접속하는 것도 모두 게이트웨이를 통해 인터넷 망에 접근하는 것. 이와 같이 서로 다른 네트워크 간 접근을 위해서는 게이트웨이 주소가 필요하며, 기본적으로 IP 마지막 자리를 `1`로 설정.
 
+```
+sudo docker container run -d -p 80:80 --name hello1 httpd
+sudo docker container run -d -p 8080:80 --name hello2 httpd
+sudo docker container run -d -p 8081:80 --name hello3 httpd
+```
 
+` sudo docker container inspect --format="{{ .NetworkSettings.IPAddress }}"를 통해 ip 확인 `
 
+![화면 캡처 2021-09-08 151009](https://user-images.githubusercontent.com/62214428/132455622-e79b0fd5-f90e-4667-ada6-8d4a51a6b639.png)
 
+------------------
+ ` 참고로 거의 대부분 1번 bridge 방식을 따르고 2,3번은 참조용 `
+ 
+ **2) `host`**
+ ![화면 캡처 2021-09-08 151152](https://user-images.githubusercontent.com/62214428/132455805-a8558f40-886e-47dc-8ab1-f9907c6b17c0.png)
+`host` 네트워크는 단어 그대로 별도의 경유 없이 도커 엔진이 작동하고 있는 Host의 IP 주소를 그대로 사용하는 것. `bridge`를 통해 NAPT의 과정을 거치지 않아도 되며, 명시적으로 컨테이너의 포트를 명령어에 작성하지 않아도 된다. 다시 말해 컨테이너를 격리된 네트워크로 구성하지 않고 도커 엔진과 한 공간에 두는 것.
 
+` 주의 !! ★ host` 형식의 네트워크는 Host OS가 리눅스인 경우에만 지원하며, Docker Desktop의 형태로 사용하는 경우 지원 x .
+
+```
+~$ sudo docker container run -it --network host --name ubuntu-host ubuntu:18.04
+
+/# apt-get update
+/# apt-get install net-tools
+```
+
+**3) `none`**
+`none` 은 말 그대로 컨테이너를 격리된 공간에 차단시켜놓고 어떠한 네트워크와도 연결하지 못하게 하는 것.
+
+```
+~$ sudo docker container run -it --network none --name ubuntu-none ubuntu:18.04
+
+/# apt-get update
+```
