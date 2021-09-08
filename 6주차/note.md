@@ -115,3 +115,73 @@ sudo docker container run -d -p 8081:80 --name hello3 httpd
 
 /# apt-get update
 ```
+
+
+### 6.1.3 도커 네트워크 명령어
+
+**1) `ls` - 네트워크 목록 조회**
+
+```bash
+sudo docker network ls
+sudo docker network ls --filter driver=bridge
+
+filter를 통해 원하는 것만 조회가능
+```
+![화면 캡처 2021-09-08 155955](https://user-images.githubusercontent.com/62214428/132461667-7286326c-eeb9-4e62-b399-56657c462f2e.png)
+
+**2) `create` - 네트워크 생성**
+
+```bash
+sudo docker network create --driver=bridge new-bridge
+```
+![화면 캡처 2021-09-08 160123](https://user-images.githubusercontent.com/62214428/132461855-0b05e167-5e42-4c4b-9819-874475b125b4.png)
+
+- 참고 : 보통은 명령어를 입력해서 생성하기 보다는 docker-compose.yaml 내에 세팅하는 경우가 더 많다.
+
+**3) `connect` - 컨테이너를 네트워크에 연결**
+
+```bash
+sudo docker network connect new-bridge webserver1
+sudo docker container inspect webserver1
+```
+
+![화면 캡처 2021-09-08 160320](https://user-images.githubusercontent.com/62214428/132462074-d8c17121-051e-4b07-9b91-f25e772704f8.png)
+
+` sudo docker container inspect 컨테이너이름 `
+
+![화면 캡처 2021-09-08 160426](https://user-images.githubusercontent.com/62214428/132462199-0f234876-856e-4094-b724-15fe685165a4.png)
+
+`현재 hello 컨테이너는 두 개의 네트워크와 연결된 상태 / 원래 bridge에만 연결 -> new-bridge까지 / 하나의 컨테이너는 여러개의 네트워크(ip확인)와 연결될 수 있다 `
+
+```
+docker container run` 에 `--net` 옵션을 추가해서 컨테이너를 생성하면 디폴트 네트워크 설정값인 `bridge` 를 연결하지 않고 
+명령어에 설정된 `new-bridge` 만 연결
+
+sudo docker container run -d -p 8082:80 --name=webserver4 --net=new-bridge httpd
+sudo docker container inspect webserver4
+```
+
+**4) `disconnect` - 컨테이너를 네트워크에서 해제**
+
+```bash
+sudo docker network disconnect new-bridge hello
+```
+![화면 캡처 2021-09-08 160811](https://user-images.githubusercontent.com/62214428/132462669-c357afdd-e9c5-49d4-b6fd-297b078ac5c2.png)
+- inspect로 확인
+
+
+**5) `inspect` - 네트워크 상세정보 조회**
+
+```bash
+sudo docker network inspect new-bridge
+```
+
+**6) `rm` - 네트워크 삭제**
+
+```bash
+sudo docker network rm new-bridge
+```
+
+
+
+
