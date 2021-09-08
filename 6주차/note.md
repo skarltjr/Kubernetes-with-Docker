@@ -182,6 +182,55 @@ sudo docker network inspect new-bridge
 sudo docker network rm new-bridge
 ```
 
+## 6.2 도커 볼륨
+
+컨테이너 내부는 어플리케이션을 실행하기 위한 다양한 파일로 구성되어 있다. 이러한 파일들을 관리하기 위해 디스크 드라이브가 내부적으로 작동.
+
+그렇다면 컨테이너 내부의 파일은 영원할까?  컨테이너는 영원한가요?
+
+컨테이너는 언제든지 멈추고 삭제할 수 있다. 컨테이너 내부의 디스크에서 존재하던 파일 혹은 데이터 역시 컨테이너를 삭제하게 되면 함께 사라진다. 영구적으로 혹은 일정 기간동안 데이터를 보관하는 용도로 사용해야 한다면 이를 관리하기 위해 다른 방법을 생각해야 한다.
+
+도커에서는 `Volume`과 `Bind Mount`라는 개념으로 Host의 일부 영역을 할당해 스토리지로 사용할 수 있게 해준다.
+
+**6.2.2 Volume**
+
+Volume은 Bind Mount 이후에 나온 개념으로, 호스트의 경로를 임의로 지정할 수 없다. 대신 도커 엔진에서 관리하는 `/var/lib/docker/volumes/<볼륨명>` 으로만 세팅. 볼륨은 컨테이너를 실행하는 단계에서 생성할 수 있으며 볼륨만 개별적으로 생성하는 것도 가능.
+` 참고로 내가 사용한 wsl2 환경에서는 \\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes에 위치 `
+
+```
+
+~$ sudo docker container run -d -it --name volume -v volume1:/volume-test ubuntu:18.04
+                                      
+~$ sudo docker container attach volume
+
+/# echo "volume" > ./volume-test/volume.txt
+
+~$ cd /var/lib/docker/volumes/volume1/_data
+~$ cat volume.txt
+```
+
+### 중요
+` ~$ sudo docker container run -d -it --name volume -v volume1:/volume-test ubuntu:18.04 `
+
+` 
+  volume1:/volume-test ubuntu:18.04 ->  volume1과 컨테이너 내부 volume-test 연결 
+  따라서 volume1은 내 컴퓨터 디렉토리에서 접근할 수 있고
+  volume-test는 컨테이너 내부에서 접근할 수 있다
+`        
+
+- 현재 컨테이너를 위와 같이 실행한 상태 
+- \\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes\volume1\ --> 위에서 말한 volume1이 생성
+- ![화면 캡처 2021-09-08 173812](https://user-images.githubusercontent.com/62214428/132476046-73f82276-586c-4daa-aa68-4fb71a1ffcc9.png)
+- 컨테이너로 접속해보면 volume-test 디렉토리가 생성된것을 확인
+- 그럼 확인해볼 수 있는게 컨테이너에서 txt파일을 생성하면 이를 저장하기 위한 공간인 volume에도 생성될 것 
+- ![화면 캡처 2021-09-08 174334](https://user-images.githubusercontent.com/62214428/132476932-7b08da63-fcaa-4ffe-8e0a-40ad9c603153.png)
 
 
 
+-------
+
+```bash
+# 볼륨 개별 생성
+
+sudo docker volume create volume2
+```
