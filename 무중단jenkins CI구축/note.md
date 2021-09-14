@@ -80,9 +80,10 @@ sudo docker exec -it jenkinsci cat /root/.ssh/id_rsa
 - ![화면 캡처 2021-09-14 160124](https://user-images.githubusercontent.com/62214428/133210663-5700087c-b90d-431a-a22e-0ec4effc7414.png)
 - 우분투에서 폴더만들고
 - git init
-- git clone
+- git clone // 참고로 멍때리다 클론받은 폴더 안에 안들어가고 밖에서 헛짓거리했다
 - 이 후
 1) 이미지를 빌드할 로컬 Repository에서 **Jenkinsfile** 을 생성한 후 아래와 같이 작성.
+```
 node {
      stage('Clone') {
          checkout scm
@@ -99,9 +100,27 @@ node {
          }
      }
  }
+ ```
 2) Jenkinsfile을 Github Repository 에 push.
 ```
 git add -A
 git commit -m "Jenkinsfile added"
 git push -u origin main
 ```
+
+3) 도커파일도 올리자
+
+
+# 6. Jenkins Pipeline 생성
+
+1) **New Item** 메뉴로 들어가서 item 이름을 작성하고 **Pipeline** 을 선택 후 ok.
+![화면 캡처 2021-09-14 163101](https://user-images.githubusercontent.com/62214428/133214677-069ba5a8-21d4-4e31-bd94-f1f2ab5482c5.png)
+2) Build Trigger 항목에서 GitHub hook trigger for GITScm polling 를 체크.
+3) Definition 항목에서 Pipeline script from SCM 을 선택하고 SCM은 Git, Repository URL은 Github 저장소 주소.
+4) 하단의 **Branch**는 */**main**으로 입력하고 **Script Path**가 **Jenkinsfile** 로 되어 있는지 확인하고 Save 버튼.
+![화면 캡처 2021-09-14 163931](https://user-images.githubusercontent.com/62214428/133215954-3eca7294-bfe2-458a-93f4-823e2dd1cfd7.png)
+
+# 7. Jenkins Pipeline Build
+
+1) 이제 모든 세팅이 완료.
+2)  **Build Now** 를 누르면 Github Repository의 소스를 자동으로 빌드하여 Docker Hub에 공개. 로컬 git repository에서 일부 수정사항을 commit 하고 Github repository에 push 하면 별도로 Build Now 버튼을 누르지 않아도 Pipeline 이 자동으로 수행.
