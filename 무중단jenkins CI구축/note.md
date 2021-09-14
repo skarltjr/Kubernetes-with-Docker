@@ -124,3 +124,43 @@ git push -u origin main
 
 1) 이제 모든 세팅이 완료.
 2)  **Build Now** 를 누르면 Github Repository의 소스를 자동으로 빌드하여 Docker Hub에 공개. 로컬 git repository에서 일부 수정사항을 commit 하고 Github repository에 push 하면 별도로 Build Now 버튼을 누르지 않아도 Pipeline 이 자동으로 수행.
+
+
+--------------
+---------------
+
+
+## 테스트 
+![화면 캡처 2021-09-14 164318](https://user-images.githubusercontent.com/62214428/133216586-9f4a52ca-1272-449f-8473-95f19548c298.png)
+
+- 깃허브에 push해보고 자동으로 배포되는지 확인
+기존 도커 파일
+```
+FROM ubuntu:18.04
+
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install nginx
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
+```
+변경한 도커 파일
+```
+FROM ubuntu:18.04
+# 테스트를 위해 주석만 추가
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install nginx
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
+```
+1. 변경사항 push 확인
+![화면 캡처 2021-09-14 165605](https://user-images.githubusercontent.com/62214428/133218717-784c4c22-b72e-4b42-95a2-13e207339e87.png)
+2. 자동 deploy확인
+![화면 캡처 2021-09-14 165551](https://user-images.githubusercontent.com/62214428/133218785-e62c9a25-5b44-41bf-b68a-69dc0d12dc0e.png)
+3. 도커허브 확인
+![화면 캡처 2021-09-14 165639](https://user-images.githubusercontent.com/62214428/133218800-5cd7e1ab-d7dd-432f-8588-a4c6d08bbbbc.png)
