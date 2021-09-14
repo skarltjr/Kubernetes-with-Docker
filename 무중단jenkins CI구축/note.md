@@ -62,3 +62,46 @@ sudo docker exec -it jenkinsci cat /root/.ssh/id_rsa
 # 3. Docker Hub 계정 등록
 
 1) 브라우저의 Jenkins 대시보드에서 **Manage Jenkins** 를 클릭하고 이어 **Manage Credentials** 를 클릭.
+2) **Jenkins - Global credentials (unrestricted) - Add Credentials** 를 차례대로 클릭.
+3) Kind 는 Username with password 로 설정한 후, Username 과 Password는 사용하고 있는 Docker Hub 계정정보를 입력/ ID는 인증정보를 식별할 수 있는 값.
+![화면 캡처 2021-09-14 155321](https://user-images.githubusercontent.com/62214428/133209623-fd0f39ca-4b4c-40e7-8eeb-f17c70b75d3d.png)
+4) 총 2개의 credential 확인
+![화면 캡처 2021-09-14 155349](https://user-images.githubusercontent.com/62214428/133209698-92c85c90-c7d7-4976-8644-8d74b6f6a29d.png)
+
+# 4. Github WebHook 등록
+
+1) **Settings - Webhooks** 화면에서 **Add webhook** 버튼.
+2) Payload URL에 http://<인스턴스 외부IP>:8080/github-webhook/ 를 입력하고 Content type 은 application/x-www-form-urlencoded 를 선택.
+![화면 캡처 2021-09-14 155614](https://user-images.githubusercontent.com/62214428/133210009-c384b4fe-bd36-4e7c-863e-1d529e27f545.png)
+
+
+# 5. Jenkinsfile 생성
+- 우선 도커허브 저장소 하나 생성
+- ![화면 캡처 2021-09-14 160124](https://user-images.githubusercontent.com/62214428/133210663-5700087c-b90d-431a-a22e-0ec4effc7414.png)
+- 우분투에서 폴더만들고
+- git init
+- git clone
+- 이 후
+1) 이미지를 빌드할 로컬 Repository에서 **Jenkinsfile** 을 생성한 후 아래와 같이 작성.
+node {
+     stage('Clone') {
+         checkout scm
+     }
+     stage('Build') {
+         app = docker.build("skarltjr/jenkinsci")
+         # 빌드할 이미지명은 자신의 Docker Hub 계정.
+				 # app = docker.build("<계정명>/<저장소명>")
+     }
+     stage('Push') {
+         docker.withRegistry('https://registry.hub.docker.com', 'docker_hub') {
+             app.push("${env.BUILD_NUMBER}")
+             app.push("latest")
+         }
+     }
+ }
+2) Jenkinsfile을 Github Repository 에 push.
+```
+git add -A
+git commit -m "Jenkinsfile added"
+git push -u origin main
+```
