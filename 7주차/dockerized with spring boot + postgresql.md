@@ -60,6 +60,9 @@ services:
 - application.environment를 통해 db 연결 정보★를 작성하는데 잘 살펴봐야한다. 안그럼 연결안돼서 고생을 한다.
 
 
+---------------
+## 이 프로젝트를 이제 push
+
 ### 5. 해당 프로젝트를 clone하고 실행해보자
 - -> git clone ~~
 - -> src/main/docker로 가서
