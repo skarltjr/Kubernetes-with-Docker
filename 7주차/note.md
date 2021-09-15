@@ -149,4 +149,160 @@ sudo docker-compose stop
 sudo docker-compose down
 ```
 
+## 7.3 docker-compose.yml 작성 - 요소를 하나씩 살펴보자
+참고로 두 칸씩 띄운다 
 
+
+```yaml
+version: "3.9"
+services:
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  nc:
+    image: nextcloud:apache
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+    ports:
+      - "80:80"
+    restart: always
+    volumes:
+      - nc_data:/var/www/html
+    depends_on:
+      - db
+volumes:
+  nc_data:
+  db_data: 
+```
+**1) `version`**
+
+```yaml
+version: "3.9"
+```
+
+Docker Compose 파일은 최상단에 버전을 정의하도록 되어있다. 각 버전별로 명령어 혹은 표기법이 다르기 때문에 정상적으로 작동하지 않는 경우 버전을 체크해보아야 한다.
+
+더불어 설치된 도커 엔진 버전과의 호환성도 반드시 확인. / https://docs.docker.com/compose/compose-file/compose-file-v3/
+
+**2) `services`**
+
+```yaml
+services:
+  db:
+    ...
+  nc:
+    ...
+```
+
+서비스는 Compose 에서 실행할 컨테이너라고 생각. 각 서비스 별로 그에 맞는 환경의 컨테이너를 구성하기 위해 내부에 다양한 옵션을 추가. 혼동하지 말아야 하는 것은 서비스명과 컨테이너명은 다른 개념. 
+
+만약 원하는 컨테이너명을 설정하고 싶다면 각 서비스 하위에 `container_name` 키와 설정하려는 값을 추가.
+
+**3) `image`**
+
+```yaml
+services:
+  db:
+		image: postgres:alpine
+      ...
+  nc:
+		image: nextcloud:apache
+      ...
+```
+
+이미지는 말 그대로 컨테이너로 실행할 대상 이미지를 설정
+
+
+**4) `build`**
+
+```yaml
+services:
+  db:
+		...
+  nc:
+		build:
+			context: .
+			dockerfile: Dockerfile
+		...
+```
+
+이미 로컬에 이미지가 있거나 Docker Hub에 이미지가 있다면 이미지명과 태그만으로 쉽게 내려받아 컨테이너를 구성할 수 있다. 하지만 일반적으로 작성한 `Dockerfile` 에서 빌드된 이미지를 기반으로 컨테이너를 실행. 
+
+Compose 에서는 실행할 이미지명 대신에 빌드할 `Dockerfile` 의 정보를 입력하여 이를 빌드하고 바로 이미지로 사용할 수 있다. `dockerfile` 옵션을 사용하면 파일의 이름이 `Dockerfile` 이 아닌 것도 빌드 대상으로 지정할 수 있으며 경로 역시 동일 경로가 아닌 다른 경로를 지정할 수 있다.
+
+context . ==> 경로
+
+**5) `command`**
+
+```yaml
+services:
+  db:
+		...
+  nc:
+		build:
+			context: .
+			dockerfile: Dockerfile
+		command: java -jar app.jar
+```
+
+생성된 컨테이너에 어떤 명령을 내릴지 세팅. 보통 컴파일러나 특정 언어로 작성된 어플리케이션을 명령어로 실행해야 하는 경우에 사용.
+
+**6) `ports`**
+
+```yaml
+services:
+  db:
+		...
+  nc:
+		ports: "80:80"
+		...
+```
+
+포트포워딩을 설정하는 항목으로 `docker run -p 80:80` 와 동일한 기능. 다만, yaml 파일에서는 `XX:YY` 의 형식이 시간값으로 해석될 수 있기 때문에 안전하게 따옴표 처리를 하시는 것을 권장.
+
+**7) `depends_on`**
+
+```yaml
+services:
+  db:
+		...
+  nc:
+		depends_on:
+			- db
+		...
+```
+
+특정 서비스가 먼저 시작되면 이어서 시작할 수 있도록 설정하는 명령어. 위 예제 소스를 보면 `nc` 라는 서비스에 `db` 가 `depends_on` 으로 걸려있는데, 이는 `db` 서비스가 시작되면 `nc` 서비스가 시작되도록 순서를 정하는 것. 다만, `db` 가 완전히 초기화 되어 리스닝 상태까지 도달 했는지는 확인하지 않는다. 단순히 시작이 되었느냐, 아니냐 만을 가지고 서비스를 시작.
+
+즉. 웹 서비스가 먼저 올라가고 db가 좀 늦게 올라간 상태에서 웹 서비스는 db에 연결을 하려고 시도할 것 
+-> 이 때 웹 서비스가 연결을 할 수 없으니 fail날 것 
+-> 그래서 restart always가 필요하고 
+-> depends on이 필요
+
+**8) `environment`**
+
+```yaml
+services:
+  db:
+		...
+  nc:
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+		...
+```
+
+환경변수를 설정하는 항목이며, DB 계정 및 초기 DB 세팅 등에 주로 사용. 이외 필요에 따라 각 컨테이너별 환경변수를 할당할 수 있다. `docker run -e` 와 유사한 기능
+-> 
