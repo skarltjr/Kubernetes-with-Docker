@@ -58,6 +58,7 @@ services:
 - ★가장 고생한 부분 -> db connection 
 - 우선 properties에 `spring.datasource.driverClassName=org.postgresql.Driver`를 통해 postgresql을 사용함을 알린다
 - application.environment를 통해 db 연결 정보★를 작성하는데 잘 살펴봐야한다. 안그럼 연결안돼서 고생을 한다.
+- 특히 `SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/postgres` 이 부분을 잘 살펴봐라
 
 
 ---------------
