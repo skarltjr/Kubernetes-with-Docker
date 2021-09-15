@@ -100,6 +100,7 @@ volumes:
 
 **5) `docker-compose down` - up을 통해 생성한 리소스 stop & remove**
 
+**6) 그래서 만약 안쓰는 컴퓨터에 nextcloud를 이렇게 구축해놓으면 나만의 드라이브( 구글 드라이브, dropbox 같은..) 구축
 
 
 
