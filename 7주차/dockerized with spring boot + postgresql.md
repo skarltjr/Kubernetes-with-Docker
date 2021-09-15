@@ -1,6 +1,7 @@
 ## 실제로 적용해보자
 - https://github.com/skarltjr/Springboot-jwt 결과물
-- https://www.baeldung.com/spring-boot-postgresql-docker
+- 도커 허브를 사용해라 -> 대부분의 도커에 관한 파일 작성 키워드를 파악할 수 있다
+- 여기서는 https://hub.docker.com/_/postgres를 참조
 
 
 ### 1. 우선 여기선 jar파일을 미리 만드는 쪽으로 
