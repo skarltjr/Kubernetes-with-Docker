@@ -103,10 +103,50 @@ volumes:
 **6) 그래서 만약 안쓰는 컴퓨터에 nextcloud를 이렇게 구축해놓으면 나만의 드라이브( 구글 드라이브, dropbox 같은..) 구축
 
 
+## 7.2 Docker Compose 명령어
 
+`명령어는 기본적으로 `docker-compose.yml` 파일이 위치한 곳의 경로에서 실행.`
 
+**1) `up` - 멀티 컨테이너 생성 및 실행**
 
+컨테이너의 이름은 별도로 설정하지 않으면 `[docker-compose.yml 파일이 위치한 디렉토리명]_[서비스명]_[번호]` 의 형태로 정의.
+```
+옵션
+-d, --detach	컨테이너를 백그라운드에서 실행합니다.
+—-build	컨테이너를 생성하기 전에 이미지를 빌드합니다.
+—-no-build	실행 대상 이미지가 존재하지 않더라도 빌드하지 않습니다.
+--abort-on-container-exit	여러 컨테이너들 중 하나라도 종료되면 모두 종료됩니다.
+주의❗️—-detach 와 함께 사용할 수 없습니다.
+```
 
+**2) `ps` - 컨테이너 조회**
 
+`docker ps` 혹은 `docker container ls` 를 사용해도 실행 중인 컨테이너를 조회할 수 있다. 다만, `docker-compose ps` 를 통해 조회했을 때의 출력 양식에서 약간 차이.
+
+**3) `run` - 컨테이너 내부에서 명령 실행**
+
+명령어를 사용할 때 주의할 점은 `run` 명령어 실행의 인수를 컨테이너명이 아닌 `docker-compose.yml` 에 정의된 서비스명으로 입력해야 하는 것.
+- 위의 예시에선 서비스를 db / nc라는 이름으로 지정했다.
+```bash
+sudo docker-compose run [서비스명] [실행 대상 명령]
+sudo docker-compose run db bash
+```
+**4) `start` - 생성되어 있는 컨테이너 실행**
+
+```bash
+sudo docker-compose start
+```
+
+**5) `stop` - 생성되어 있는 컨테이너 종료**
+
+```bash
+sudo docker-compose stop
+```
+
+**6) `down` - 컨테이너 종료 및 삭제**
+
+```bash
+sudo docker-compose down
+```
 
 
