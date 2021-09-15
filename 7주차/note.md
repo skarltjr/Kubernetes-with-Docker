@@ -83,18 +83,18 @@ volumes:
 **1) yml파일 작성**
 - ![화면 캡처 2021-09-15 151807](https://user-images.githubusercontent.com/62214428/133380701-c1826d62-b5ea-4cdd-9958-b91f7219ea92.png)
 - 현재 `docker-compose`라는 폴더 안에서 yml작성
-**2) `sudo docker-compose up`을 통해 구동``
+**2) `sudo docker-compose up`을 통해 구동`**
 - `localhost:80"으로 접속해보면 80포트로 띄운 nextcloud
 - ![화면 캡처 2021-09-15 151916](https://user-images.githubusercontent.com/62214428/133380868-14cad942-a756-4caf-9071-c9169e86479a.png)
-**3) `docker ps`로 구성한 두 개의 컨테이너가 동작하는것을 확인 
+**3) `docker ps`로 구성한 두 개의 컨테이너가 동작하는것을 확인 **
 - 참고로 이 때 컨테이너가 폴더 이름을 따름
 
-**4) `docker network ls`로 조회
+**4) `docker network ls`로 조회**
 - 새로운 네트워크의 등장
 - ![화면 캡처 2021-09-15 152215](https://user-images.githubusercontent.com/62214428/133381233-12eb30dc-005a-4c5f-8f0e-b167d9cde9a0.png)
 - `docker compose`로 구동한 두 개의 컨테이너를 이어주는 네트워크
 
-**5) `docker-compose down` - up을 통해 생성한 리소스 stop & remove
+**5) `docker-compose down` - up을 통해 생성한 리소스 stop & remove**
 
 
 
