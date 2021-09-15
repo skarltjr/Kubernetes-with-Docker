@@ -213,10 +213,10 @@ services:
 ```yaml
 services:
   db:
-		image: postgres:alpine
+    image: postgres:alpine
       ...
   nc:
-		image: nextcloud:apache
+    image: nextcloud:apache
       ...
 ```
 
@@ -228,12 +228,12 @@ services:
 ```yaml
 services:
   db:
-		...
+    ...
   nc:
-		build:
-			context: .
-			dockerfile: Dockerfile
-		...
+    build:
+      context: .
+      dockerfile: Dockerfile
+      ...
 ```
 
 이미 로컬에 이미지가 있거나 Docker Hub에 이미지가 있다면 이미지명과 태그만으로 쉽게 내려받아 컨테이너를 구성할 수 있다. 하지만 일반적으로 작성한 `Dockerfile` 에서 빌드된 이미지를 기반으로 컨테이너를 실행. 
@@ -247,12 +247,12 @@ context . ==> 경로
 ```yaml
 services:
   db:
-		...
+    ...
   nc:
-		build:
-			context: .
-			dockerfile: Dockerfile
-		command: java -jar app.jar
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: java -jar app.jar
 ```
 
 생성된 컨테이너에 어떤 명령을 내릴지 세팅. 보통 컴파일러나 특정 언어로 작성된 어플리케이션을 명령어로 실행해야 하는 경우에 사용.
@@ -262,10 +262,10 @@ services:
 ```yaml
 services:
   db:
-		...
+    ...
   nc:
-		ports: "80:80"
-		...
+    ports: "80:80"
+    ...
 ```
 
 포트포워딩을 설정하는 항목으로 `docker run -p 80:80` 와 동일한 기능. 다만, yaml 파일에서는 `XX:YY` 의 형식이 시간값으로 해석될 수 있기 때문에 안전하게 따옴표 처리를 하시는 것을 권장.
@@ -275,11 +275,11 @@ services:
 ```yaml
 services:
   db:
-		...
+    ...
   nc:
-		depends_on:
-			- db
-		...
+    depends_on:
+      - db
+      ...
 ```
 
 특정 서비스가 먼저 시작되면 이어서 시작할 수 있도록 설정하는 명령어. 위 예제 소스를 보면 `nc` 라는 서비스에 `db` 가 `depends_on` 으로 걸려있는데, 이는 `db` 서비스가 시작되면 `nc` 서비스가 시작되도록 순서를 정하는 것. 다만, `db` 가 완전히 초기화 되어 리스닝 상태까지 도달 했는지는 확인하지 않는다. 단순히 시작이 되었느냐, 아니냐 만을 가지고 서비스를 시작.
@@ -294,14 +294,14 @@ services:
 ```yaml
 services:
   db:
-		...
+    ...
   nc:
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_PASSWORD=nextcloud
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
-		...
+      ...
 ```
 
 환경변수를 설정하는 항목이며, DB 계정 및 초기 DB 세팅 등에 주로 사용. 이외 필요에 따라 각 컨테이너별 환경변수를 할당할 수 있다. `docker run -e` 와 유사한 기능
