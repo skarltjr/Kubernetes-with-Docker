@@ -42,4 +42,22 @@
 ![화면 캡처 2021-09-29 215011](https://user-images.githubusercontent.com/62214428/135271672-5e75e4ba-a157-495d-ba18-c466f62cc4c7.png)
 ![화면 캡처 2021-09-29 214736](https://user-images.githubusercontent.com/62214428/135271664-fa0512e3-a114-48fb-b9d2-d221cc3480fa.png)
 
+- GCP를 사용했을 땐 외부 공인 IP를 할당받고 SSH까지 있었나 여긴 아직은 없다.
+- 위처럼 그래서 직접 SSH접속을 해서 인스턴스 동작을 확인하자
 
+**5) SSH**
+- 위 사진처럼 해봤지만 에러가 있어서 다시 정리
+  - 1. `openVPN`연결 + `route print`로 확인
+  - 2. ![화면 캡처 2021-09-30 172831](https://user-images.githubusercontent.com/62214428/135416516-53c705c0-ef5e-40a8-973f-ddd6f466ec86.png)
+  - 3. 확인한 게이트웨이 주소를 라우트 설정에 등록 / -p 옵션으로 영구적으로 가능 / 여기선 사용안하겠다. 
+```powershell
+route ADD 172.30.0.0 MASK 255.255.252.0 [게이트웨이IP]
+route ADD 172.30.4.0 MASK 255.255.252.0 [게이트웨이IP]
+```
+
+**6) 접속**
+```powershell
+ssh -i [pem 키] centos@[인스턴스IP]
+```
+![화면 캡처 2021-09-30 173605](https://user-images.githubusercontent.com/62214428/135417808-715e8d05-1a5b-46f6-90d3-f55c061e93fe.png)
+- 참고로 pem키의 권한 600으로 변경
