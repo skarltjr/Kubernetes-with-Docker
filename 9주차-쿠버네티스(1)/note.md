@@ -61,3 +61,4 @@ ssh -i [pem 키] centos@[인스턴스IP]
 ```
 ![화면 캡처 2021-09-30 173605](https://user-images.githubusercontent.com/62214428/135417808-715e8d05-1a5b-46f6-90d3-f55c061e93fe.png)
 - 참고로 pem키의 권한 600으로 변경
+- 접속해서 확인차 `ping 8.8.8.8` 수행
