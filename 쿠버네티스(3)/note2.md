@@ -111,6 +111,7 @@ sudo systemctl restart kubelet
 ```
 ![화면 캡처 2021-10-14 003043](https://user-images.githubusercontent.com/62214428/137165497-ada30c91-2c52-4897-85ec-776306964c45.png)
 
+### 6. 
 
 
 
