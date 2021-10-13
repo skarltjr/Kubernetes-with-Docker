@@ -39,7 +39,7 @@ sudo sysctl --system
 - 1 => 활성화 즉 활성화시킨다
 - 이 과정을 `모든 노드`에 대해 수행
 
-### 4. 런타임 설치
+### 4. 런타임 설치 / 도커
 - `파드에서 컨테이너를 실행하기 위해, 쿠버네티스는 컨테이너 런타임을 사용한다.`
 - 도커를 사용할거니까 도커를 설치한다 // 모든 노드에 대해
 ```
@@ -59,11 +59,57 @@ iver=systemd
 - `sudo vi	/usr/lib/systemd/system/docker.service`를 통해 docker.service에 들어가서 `ExecStart`으로 시작하는 부분에서 설정
 - 여기서 오타나면 망한다!!!
 
+### 5. kubeadm, kubelet 및 kubectl 설치
+- [전체 노드] Redhat 배포판 버젼으로
+```
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
+EOF
+
+먼저 여기까지 복사붙여넣으면 레포지토리들을 저장
+`cd /etc/yum.repos.d/` 으로 확인해보고
+
+===>  permissive 모드로 SELinux 설정(효과적으로 비활성화)
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+sudo systemctl enable --now kubelet
+```
+
+• [전체 노드] 단, kubelet / kubeadmin / kubectl 은 최신보다 한단계 낮은 버젼으로 설치 (나중에 업데이트해보기 위해)
+```
+#	sudo yum	info	kubelet --disableexcludes=Kubernetes -y // 그냥 정보확인
+#	sudo yum	install	kubelet-1.21.0	--disableexcludes=kubernetes -y // 여기서부터 모든 노드에서 설치
+#	sudo yum	install	kubectl-1.21.0	--disableexcludes=kubernetes -y
+#	sudo yum	install	kubeadm-1.21.0	--disableexcludes=kubernetes -y
+# sudo systemctl enable	--now	kubelet // enable을 해주면 껐다 켜지면 자동으로 재시작알아서
+```
+
+- 다음으로
+```
+앞에서 도커의 cgroup driver를 systemd로 설정했기에, 쿠버도 마찬가지로 설정
+#	sudo vi	/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf	
+
+그림참조
+[Service]	
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd --runtime-cgroups=/systemd/system.slice --kubeletcgroups=/systemd/system.slice"
 
 
-
-
-
+이 후 
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+이제 필요한 패키지는 모두 설치 완료. 클러스터를 만들어야 함
+```
+![화면 캡처 2021-10-14 003043](https://user-images.githubusercontent.com/62214428/137165497-ada30c91-2c52-4897-85ec-776306964c45.png)
 
 
 
