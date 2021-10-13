@@ -166,15 +166,45 @@ export	KUBECONFIG=/etc/kubernetes/admin.conf
 - 이것은 이전에 kube init할 때 전달한 인증서를 루트에도 넣어둬서 인증이 저절로되도록한것
 
 
+- 다음으로 You should now deploy a pod network to the cluster.
+```
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+  그 중 calico = https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises
+```
+- 그래서 // 여전히 마스터노드 1에서만
+![화면 캡처 2021-10-14 021453](https://user-images.githubusercontent.com/62214428/137181438-d4cf4e2f-5198-4f34-9a27-83aad3b88b73.png)
+
+- `kubectl`이 동작하나 확인해보면 / 잘 동작하니까 kubectl apply -f calico.yml
+![화면 캡처 2021-10-14 021627](https://user-images.githubusercontent.com/62214428/137181667-bb782738-b41f-4547-bbf2-40a4720d7ba6.png)
+```
+→ #	curl	https://docs.projectcalico.org/manifests/calico.yaml -O
+→	#	kubectl apply	-f	calico.yaml
+```
+
+- 참고로 내 `finish.txt`는 cd /로 이동해야 찾을 수 있었다. ~에 넣어둔것이 아니었다
+
+
+- 다음으로 : `다른 마스터 노드`에서 아래를 수행 ( sudo su - 로 루트에서 진행)  
+- You can now join any number of the control-plane node running the following command on each as root:
+```
+  kubeadm join 172.30.4.114:16443 --token fhgojd.2ep3euw248imiqh1 \
+ --discovery-token-ca-cert-hash sha256:213c533cc9f2d1323b0f2bd20162ca48085b78f610ebee99f86f200a3e609d69 \
+ --control-plane --certificate-key f47c18f18407fd9e0e64c817bc5a81f87855a594a9098fd3b57d9f06874becb6
+        
+        
+           
+  finish.txt에서 위를 복사하고     
+```
+- 마스터노드2 들어가서 `sudo su -`
 
 
 
 
-
-
-
-
-
+  kubeadm join 172.30.4.114:16443 --token fhgojd.2ep3euw248imiqh1 \
+        --discovery-token-ca-cert-hash sha256:213c533cc9f2d1323b0f2bd20162ca48085b78f610ebee99f86f200a3e609d69 \
+        --control-plane --certificate-key f47c18f18407fd9e0e64c817bc5a81f87855a594a9098fd3b57d9f06874becb6
 
 
 
