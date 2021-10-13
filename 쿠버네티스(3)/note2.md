@@ -202,9 +202,3 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 
 
 
-  kubeadm join 172.30.4.114:16443 --token fhgojd.2ep3euw248imiqh1 \
-        --discovery-token-ca-cert-hash sha256:213c533cc9f2d1323b0f2bd20162ca48085b78f610ebee99f86f200a3e609d69 \
-        --control-plane --certificate-key f47c18f18407fd9e0e64c817bc5a81f87855a594a9098fd3b57d9f06874becb6
-
-
-
