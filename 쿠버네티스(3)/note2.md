@@ -41,19 +41,41 @@ sudo sysctl --system
 
 ### 4. 런타임 설치
 - `파드에서 컨테이너를 실행하기 위해, 쿠버네티스는 컨테이너 런타임을 사용한다.`
-- 도커를 사용할거니까 도커를 설치한다
+- 도커를 사용할거니까 도커를 설치한다 // 모든 노드에 대해
 ```
 • [전체 노드] CRI (Container runtime interface) 설치 필요 : Docker 설치/시작
 • # sudo yum	install	-y	yum-utils	device-mapper-persistent-data	lvm2	
 • # sudo yum-config-manager	--add-repo	https://download.docker.com/linux/centos/docker-ce.repo
 • # sudo yum	install	docker-ce -y
-• # sudo vi	/usr/lib/systemd/system/docker.service
+• # sudo vi	/usr/lib/systemd/system/docker.service 들어가서
 ExecStart=/usr/bin/dockerd -H	fd://	--containerd=/run/containerd/containerd.sock --exec-opt	native.cgroupdr
 iver=systemd
+
 • # sudo systemctl daemon-reload
-• # sudo systemctl start	docker	&&	sudo systemctl enable	docker
-• # sudo docker	info	|	grep	-i cgroup
+• # sudo systemctl start docker	&&	sudo systemctl enable docker
+• # sudo docker info	| grep -i cgroup
 ```
+- 참고로 `sudo vi	/usr/lib/systemd/system/docker.service` 부분은 `컨테이너 런타임`과 `kubelet`이랑 `cgroup driver`를 맞춰야하기위해 설정
+- `sudo vi	/usr/lib/systemd/system/docker.service`를 통해 docker.service에 들어가서 `ExecStart`으로 시작하는 부분에서 설정
+- 여기서 오타나면 망한다!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
