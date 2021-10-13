@@ -111,10 +111,59 @@ sudo systemctl restart kubelet
 ```
 ![화면 캡처 2021-10-14 003043](https://user-images.githubusercontent.com/62214428/137165497-ada30c91-2c52-4897-85ec-776306964c45.png)
 
-### 6. 
+### 6. etcd를 따로 빼지않고 묶어서 사용할것이기 때문에
+- 로드밸런싱을 담당하는 첫번째 마스터 노드에만 stack control node를 설치한다
+- https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
+![화면 캡처 2021-10-14 014434](https://user-images.githubusercontent.com/62214428/137177282-63cc9b7d-a71b-4a4d-a47b-e76f00628f9a.png)
+`Your Kubernetes control-plane has initialized successfully!` 확인
 
+##### 참고로 to start using your clustering~ 부분부터 마지막까지 복사해서 ex) finish.txt만들어서 저장해둬라 날아갈수도있어서
+```
+To start using your cluster, you need to run the following as a regular user:  // 다른 사람이 실행할 수 있으려면 다른 유저한테 아래 내용을 수행하도록 시켜야합니다~
 
+  mkdir -p $HOME/.kube      // 참고로 .은 숨김파일
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of the control-plane node running the following command on each as root:
+
+  kubeadm join 172.30.4.114:16443 --token fhgojd.2ep3euw248imiqh1 \
+        --discovery-token-ca-cert-hash sha256:213c533cc9f2d1323b0f2bd20162ca48085b78f610ebee99f86f200a3e609d69 \
+        --control-plane --certificate-key f47c18f18407fd9e0e64c817bc5a81f87855a594a9098fd3b57d9f06874becb6
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
+"kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 172.30.4.114:16443 --token fhgojd.2ep3euw248imiqh1 \
+        --discovery-token-ca-cert-hash sha256:213c533cc9f2d1323b0f2bd20162ca48085b78f610ebee99f86f200a3e609d69
+```
+
+- 그 중 아래 부분은 복사 붙여넣기로 실행 ( 지금 다 마스터 노드 1에서)
+``` 
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+- 그 다음으로 아래 문구가 있지만
+```
+Alternatively,	if	you	are	the	root	user,	you	can	run:
+export	KUBECONFIG=/etc/kubernetes/admin.conf
+```
+- 대신하여
+- ![화면 캡처 2021-10-14 020653](https://user-images.githubusercontent.com/62214428/137180489-adca7194-f723-4ad9-88cf-72fcb2ce432e.png)
+- 이것은 이전에 kube init할 때 전달한 인증서를 루트에도 넣어둬서 인증이 저절로되도록한것
 
 
 
