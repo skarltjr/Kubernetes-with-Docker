@@ -201,6 +201,10 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 - 참고로 나는!! 마스터노드1을 실수로 최신버전으로 받아서 kubelet kubeadm ..이 다른거와 버전이 안맞고 그래서 에러났다
 - 처음부터 다시 다 했다.......
 
+- 이어서 실패했던걸  다시 다 만들고 이번엔 성공해서 빨간표시 수행 
+- ![화면 캡처 2021-10-14 220311](https://user-images.githubusercontent.com/62214428/137322684-8591c5e2-4bce-4c4e-86c1-498c41380eb6.png)
+- 마스터 2,3번 위 과정 수행했으면
+
 
 
 
