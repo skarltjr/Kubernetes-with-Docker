@@ -199,7 +199,7 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 ```
 - 마스터노드2 들어가서 `sudo su -` -> 루트에서 붙여넣는다
 - 참고로 나는!! 마스터노드1을 실수로 최신버전으로 받아서 kubelet kubeadm ..이 다른거와 버전이 안맞고 그래서 에러났다
-- 다른 노드들 `sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes`으로 최신버전으로 바꿨다
+- 처음부터 다시 다 했다.......
 
 
 
