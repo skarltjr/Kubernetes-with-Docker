@@ -203,8 +203,16 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 
 - 이어서 실패했던걸  다시 다 만들고 이번엔 성공해서 빨간표시 수행 
 - ![화면 캡처 2021-10-14 220311](https://user-images.githubusercontent.com/62214428/137322684-8591c5e2-4bce-4c4e-86c1-498c41380eb6.png)
-- 마스터 2,3번 위 과정 수행했으면
+- 마스터 2,3번 위 과정 수행했으면 마스터 1에서 확인해보기
+- ![화면 캡처 2021-10-14 220749](https://user-images.githubusercontent.com/62214428/137323407-b4189033-f924-46be-b566-85bdc5b5dc29.png)
+- 이제 `워커노드` 해줄 차례=>  마스터1의 finish.txt에서 맨 아래 문구 마찬가지로 복사 후 => 워커 1,2에서 `루트`로 실행
+```
+kubeadm join 172.30.4.244:16443 --token uhl4o2.i89wbakhi813p6c2 \
+--discovery-token-ca-cert-hash sha256:1101f3634043690b5e5b2c99b1ed08e2717d00b8aba5fa9dcd7db75878f12015
+```
 
+- 확인해보면 마스터1에서 `kubectl get nodes`
+- ![화면 캡처 2021-10-14 221505](https://user-images.githubusercontent.com/62214428/137324623-59c6f9ca-cac2-44e6-8493-daaef3490536.png)
 
 
 
