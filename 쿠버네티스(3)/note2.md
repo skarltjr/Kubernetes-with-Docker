@@ -214,5 +214,30 @@ kubeadm join 172.30.4.244:16443 --token uhl4o2.i89wbakhi813p6c2 \
 - 확인해보면 마스터1에서 `kubectl get nodes`
 - ![화면 캡처 2021-10-14 221505](https://user-images.githubusercontent.com/62214428/137324623-59c6f9ca-cac2-44e6-8493-daaef3490536.png)
 
+---------------------
 
+### kubectl
+• Kubectl 은 쿠버네티스 클러스터를 제어하기 위한 커맨드 라인 도구
+ü kubectl [command] [TYPE] [NAME] [flags]
+- command: 명령을 하려는 ‘동사’. 예: create, get, describe, delete
+- TYPE: 리소스 타입
+- NAME: 리소스 이름
+- flags: 선택적 옵션
+
+- 보라색이 자주 쓰일 수 있는 것들
+- ![화면 캡처 2021-10-14 222001](https://user-images.githubusercontent.com/62214428/137325487-9305c6de-e28d-4b62-b80c-438510be6ec0.png)
+- `kubectl run`은 파드를 생성하는 것 그런데 `kubectl run 파드이름 --image=이미지 --dry-run=client -o yaml > kiseok.yaml`로 하면 yaml로 만들어준다
+- `왜 yaml로 하냐 굳이?` => 쿠버네티스가 다 명령어를 먹지 않을 때도 있다고한다. 그래서  yaml로도 많이 쓴다.
+- 그래서 저 yaml은 아직 파드를 만든게 아니고 파드를 만들 준비를 작성해둔것
+- `kubectl apply -f kiseok.yaml`로 yaml을 통해 파드 생성
+
+### 관련 키 확인
+![화면 캡처 2021-10-14 222656](https://user-images.githubusercontent.com/62214428/137326760-eb0d1662-fcd9-4673-ad50-ada8e62170b2.png)
+![화면 캡처 2021-10-14 222627](https://user-images.githubusercontent.com/62214428/137326766-3ca34e25-c61a-4db0-ba32-572aefedd2a9.png)
+
+
+### 설치완료 후 팁
+- tab눌러서 자동완성 적용하면 편리하니까
+![화면 캡처 2021-10-14 222832](https://user-images.githubusercontent.com/62214428/137327013-2c5b77da-e0e6-4608-8fa4-40bfe124e28e.png)
+![화면 캡처 2021-10-14 223236](https://user-images.githubusercontent.com/62214428/137327737-f0c3127c-cd4e-4f10-bdae-01664b1a1ccd.png)
 
