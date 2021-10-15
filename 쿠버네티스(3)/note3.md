@@ -1,8 +1,16 @@
 ### 쿠버네티스 명령어와 yaml
 - 쿠버네티스의 모든 명령어가 다 잘 먹는건 아니다.
 - 그래서 종종 파일로 관리할때가 유리할 수 있다
+```
+kubectl 명령어 종류 
+ex)
+kubectl get 
+kubectl delete
+kubectl run 
+...
+```
 
-#### 1. 명령어로 파드를 생성하기
+#### 1. POD생성 - 명령어로 파드를 생성하기
 ex)
 ```
 kubectl run test --image=nginx
@@ -12,7 +20,7 @@ test = 파드의 이름
 --image = 파드를 생성하려면 이미지가 필수
 ```
 
-#### 2. yaml로 생성하기
+#### 2. POD생성 - yaml로 생성하기
 ```
 kubectl run test --image=nginx --dry-run=client -o yaml > kiseok.yaml
 
@@ -22,14 +30,40 @@ kubectl run test --image=nginx --dry-run=client -o yaml > kiseok.yaml
 kubectl apply -f kiseok.yaml
 ```
 
+- yaml살펴보기
+- ![화면 캡처 2021-10-15 181316](https://user-images.githubusercontent.com/62214428/137463492-8a5898e3-1ed7-40b4-b748-b83951140a2f.png)
+- `중요한 점` 우리는 이 yaml을 조작할 수 있다
+- 그래서 명령어보다 좀 더 세심하게 설정한 후 이를 `apply`해서 `pod`를 생성할 수 있다.
 
 
+#### 3. POD 조회 -   -o wide로 자세히 살펴보기
+![화면 캡처 2021-10-15 182032](https://user-images.githubusercontent.com/62214428/137464454-18ab6467-b748-4cfa-9d59-7eba87cdedc5.png)
+- `kubectl get pod -o wide` 옵션을 추가해서 더 자세히 알아볼 수 있다
+- 보면 자동으로 알아서 `워커 노드에 pod를 생성`한 것을 볼 수 있다
+
+#### 4. POD조회 - describe 명령어를 통해 하나의 pod 자세히 확인하기
+- 하나의 pod를 자세히 살펴보기 위해선 `describe`명령어를 사용한다
+- ![화면 캡처 2021-10-15 182442](https://user-images.githubusercontent.com/62214428/137465012-aaa5a8d7-bf17-4930-86c8-fe148f7b481f.png)
 
 
+#### 5. POD의 로그를 확인하자
+- `kubectl logs 파드이름`
+- ![화면 캡처 2021-10-15 182555](https://user-images.githubusercontent.com/62214428/137465177-7da29297-2bff-4079-ae02-427fd54e433f.png)
 
 
+#### 6. POD에 접속하자
+- 도커 컨테이너에 접속할 때 `exec -it`를 생각해보자
+- `kubectl exec -it pod이름 -- /bin/sh`
+- pod에 접속할게 그런데 bash는 기본 /bin/sh를 사용할게 / 참고로 --를 안붙이면 이제 붙이라는 말을 해준다
+- 마찬가지로 `exit`로 나간다
+![화면 캡처 2021-10-15 183041](https://user-images.githubusercontent.com/62214428/137465853-c8b4b098-6298-472d-8def-1e2227113c30.png)
 
 
+-------------
 
+### 쿠버네티스 리소스
+![화면 캡처 2021-10-15 183758](https://user-images.githubusercontent.com/62214428/137466875-1922ecc0-5eca-4e48-ac24-62f183f23958.png)
+- 실제로 openVPN을 활용하여 우리는 기존에 인터넷을 향하는 인터페이스 + `카카오망을 향하는 인터페이스를` 추가 
+- 라우팅까지 설정을 이미 해줬던 것 
 
 
