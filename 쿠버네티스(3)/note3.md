@@ -127,11 +127,36 @@ kubectl apply -f kiseok.yaml
 
 
 
-### DaemonSet
+### DaemonSet - 컨트롤러 오브젝트
 - ![화면 캡처 2021-10-15 211908](https://user-images.githubusercontent.com/62214428/137485598-cf116813-153b-465b-962c-3f060617f6eb.png)
 - `ReplicaSet`은 ex) pod 5개 유지. 5개를 맞추는데 집중. pod는 어느 노드에 생성되든 상관없다
 - `DaemonSet`은 `모든 노드`에 `동일한 pod` / 골고루 배포해~
 
+
+
+--------------------------
+
+### 쿠버네티스 리소스 - 로드밸런서 오브젝트
+- `Service & Ingress`
+- ![화면 캡처 2021-10-15 213231](https://user-images.githubusercontent.com/62214428/137487350-04cb6696-602a-474a-924f-b09f3f394d22.png)
+- `Ingress` => `http` 로드밸런서 - 서비스로 보내준다=> ~.com은 a서비스로 가! / ~.org는 b서비스로 가! 
+- `Service` => `pod`는 언제든지 생성,삭제되는 오브젝트. 따라서 고정적인 ip를 갖는 `Service`가 필요하고 이를 통해 pod에 로드밸런싱
+
+### Service 쿠버네티스 리소스 - 로드밸런서 오브젝트
+![화면 캡처 2021-10-15 221304](https://user-images.githubusercontent.com/62214428/137492567-67d3d998-424e-4857-9069-3ca940f6bd5e.png)
+
+
+
+------------------
+
+### 쿠버네티스 리소스 - 스토리지 오브젝트 ( PV, PVC)
+- 우선 비슷한 (노드 - 파드) / (PV - PVC)의 관계
+- ![화면 캡처 2021-10-15 223123](https://user-images.githubusercontent.com/62214428/137495395-4c749ae7-1f9d-4c77-973a-14b4158b56d1.png)
+- `pod`를 생성할 때 특정 수준의 cpu / memory가 필요한 경우 yaml에 명세. 그리고 이런 자원(cpu , memory)를 노드에 요청
+   - 즉 `pod`는 노드안에 속하고 노드의 자원을 활용
+
+- `PV , PVC`도 마찬가지
+   - `PVC`는 `PV`에게 특정 공간 크기 및 접근 모드에 대한 명세를 전달하여 요청.
 
 
 
