@@ -82,9 +82,27 @@ kubectl apply -f kiseok.yaml
      - `etcd`는 쿠버네티스의 모든 내용을 저장한다 / CNI는 이 etcd와 소통하면서 연결정보를 구성
      - 이를 통해 `마스터노드`와 아래의 2개의 `워커노드`가 서로 소통  / 워커노드에도 `CNI = calico`가 있기 때문에  
 
+### ReplicaSet - 컨트롤러 오브젝트
+- 우리는 `선언적 구성`을 한다. => 3개를 유지시켜줘! => 3개 중 2개가 삭제되면 알아서 3개로 다시 맞춰준다
+- 이걸 수행하는 것이 바로 `replicaset` 
+- 노드가 고장 / pod삭제 등 발생 시 파드를 복제하여 개수 유지
 
 
+### Deployment - 컨트롤러 오브젝트
+- `ReplicaSet`관리  - (보통 pod를 일일이 관리하기보다는 deployment 를 서비스 단위로 관리)
+- 구 버전에서 신 버전으로 복제
+- `Deployment`와 `ReplicaSet`이 유기적으로 소통하는데
+- 아래 그림을 보자!! 
+- `Deployment`는 name = myapp / replicas = 3   => 그래서 pod를 3개 생성하는데
+- ★ 이 파드들을 `Deployment`가 `ReplicaSet`한테 부탁해서 `ReplicaSet`아 pod를 3개 유지해줘!
+![화면 캡처 2021-10-15 203321](https://user-images.githubusercontent.com/62214428/137480525-9888030a-9fee-48fd-bca0-eefa83e9a464.png)
 
-
-
+### Deployment 명령어
+![화면 캡처 2021-10-15 204353](https://user-images.githubusercontent.com/62214428/137481667-f8a9f375-a82e-47ce-9f70-6cb9a06b1f83.png)
+- 먼저 `3번`을보자 `deploy-test`라는 이름 +  `replicas는 3개`로  `delpoyment`생성
+- `4번, 5번`으로 `deployment` get / 확인
+-  `6번` => 앞에서 replicas=3이라고 했기 때문에 당연히 pod 3개 만들어진것을 확인
+-  7번 `3개의 파드 중 하나를 지웠다!!` . 분명히 지웠다
+-  `8번` => 그런데 다시 get pod 해보니 그대로 3개???
+-  ★바로 replicaset이 동작한 것 => replicas = 3을 유지하기위해 다시 생성해준 것 => 시간을 확인해보면 pod 중 15s전에 태어난게있다
 
