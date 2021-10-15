@@ -151,14 +151,19 @@ kubectl apply -f kiseok.yaml
 
 ### 쿠버네티스 리소스 - 스토리지 오브젝트 ( PV, PVC)
 - 우선 비슷한 (노드 - 파드) / (PV - PVC)의 관계
-- ![화면 캡처 2021-10-15 223123](https://user-images.githubusercontent.com/62214428/137495395-4c749ae7-1f9d-4c77-973a-14b4158b56d1.png)
+- ![화면 캡처 2021-10-15 223703](https://user-images.githubusercontent.com/62214428/137496125-a7e892db-6f83-4f52-be61-9edf10e66d68.png)
 - `pod`를 생성할 때 특정 수준의 cpu / memory가 필요한 경우 yaml에 명세. 그리고 이런 자원(cpu , memory)를 노드에 요청
    - 즉 `pod`는 노드안에 속하고 노드의 자원을 활용
 
 - `PV , PVC`도 마찬가지
    - `PVC`는 `PV`에게 특정 공간 크기 및 접근 모드에 대한 명세를 전달하여 요청.
 
-
+```
+그림을 보자
+1번 => 먼저 PV를 생성한다. 수동으로든 동적으로든 / 스토리지를 생성
+2번 => 개발자가 특정! 요구에 해당하는 PVC를 작성하여 전달
+3번 => 그럼 어떤 PV(저장 공간)이 적당할 지 판단하고 적당한 PV를 우리의 애플리케이션(POD)와 mount
+```
 
 
 
