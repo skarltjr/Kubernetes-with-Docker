@@ -107,3 +107,33 @@ kubectl apply -f kiseok.yaml
 -  `8번` => 그런데 다시 get pod 해보니 그대로 3개???
 -  ★바로 replicaset이 동작한 것 => replicas = 3을 유지하기위해 다시 생성해준 것 => 시간을 확인해보면 pod 중 15s전에 태어난게있다
 
+
+
+### 참고 : 업데이트 방식
+![화면 캡처 2021-10-15 205257](https://user-images.githubusercontent.com/62214428/137482733-a23c5b0c-4446-4323-a4ee-8e0a1022a596.png)
+- 우선 `describe`로 deployment를 자세히 살펴볼 수 있다.
+- `RollingUpdate`
+   - 순차적으로 업데이트 
+   - ![화면 캡처 2021-10-15 205558](https://user-images.githubusercontent.com/62214428/137482983-b1ad8845-f364-4a51-bdcc-1914c03e240b.png)
+- `Blue Green`
+   - ![화면 캡처 2021-10-15 205657](https://user-images.githubusercontent.com/62214428/137483086-76a3ab6c-c6a0-46ae-96d5-3c56dc5cee6e.png)
+
+- `카나리`
+   - ![화면 캡처 2021-10-15 210301](https://user-images.githubusercontent.com/62214428/137483736-06fc056f-c6fc-4156-8500-161d48339bf9.png)
+
+- 중요성이 매우 높다면/ 예를 들어 전화서비스다. 그러면 롤링 업데이트나 블루그린은 어찌되었든 대량씩 확확 업데이트를 한다. 큰일날 수 있다. 그래서 조금씩조금씩 카나리를 많이 사용
+
+
+
+
+
+### DaemonSet
+- ![화면 캡처 2021-10-15 211908](https://user-images.githubusercontent.com/62214428/137485598-cf116813-153b-465b-962c-3f060617f6eb.png)
+- `ReplicaSet`은 ex) pod 5개 유지. 5개를 맞추는데 집중. pod는 어느 노드에 생성되든 상관없다
+- `DaemonSet`은 `모든 노드`에 `동일한 pod` / 골고루 배포해~
+
+
+
+
+
+
