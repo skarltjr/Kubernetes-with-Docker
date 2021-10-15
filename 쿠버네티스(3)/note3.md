@@ -100,6 +100,7 @@ kubectl apply -f kiseok.yaml
 ### Deployment 명령어
 ![화면 캡처 2021-10-15 204353](https://user-images.githubusercontent.com/62214428/137481667-f8a9f375-a82e-47ce-9f70-6cb9a06b1f83.png)
 - 먼저 `3번`을보자 `deploy-test`라는 이름 +  `replicas는 3개`로  `delpoyment`생성
+    - 여기서 봐야할 것은 3개의 파드를 하나씩 `run`으로 만든게 아니라 deployment로 한 번에 관리 이게 (보통 pod를 일일이 관리하기보다는 deployment 를 서비스 단위로 관리)의 의미
 - `4번, 5번`으로 `deployment` get / 확인
 -  `6번` => 앞에서 replicas=3이라고 했기 때문에 당연히 pod 3개 만들어진것을 확인
 -  7번 `3개의 파드 중 하나를 지웠다!!` . 분명히 지웠다
