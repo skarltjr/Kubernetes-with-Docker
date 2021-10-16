@@ -90,7 +90,8 @@ kubectl apply -f kiseok.yaml
 
 ### Deployment - 컨트롤러 오브젝트
 - `ReplicaSet`관리  - (보통 pod를 일일이 관리하기보다는 deployment 를 서비스 단위로 관리)
-- 구 버전에서 신 버전으로 복제
+- `ReplicaSet`의 추상적인 상위 개념
+- `구 버전에서 신 버전으로 복제 즉 업데이트와 관련` 
 - `Deployment`와 `ReplicaSet`이 유기적으로 소통하는데
 - 아래 그림을 보자!! 
 - `Deployment`는 name = myapp / replicas = 3   => 그래서 pod를 3개 생성하는데
