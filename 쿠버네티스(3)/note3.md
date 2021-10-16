@@ -96,8 +96,27 @@ kubectl apply -f kiseok.yaml
 - 아래 그림을 보자!! 
 - `Deployment`는 name = myapp / replicas = 3   => 그래서 pod를 3개 생성하는데
 - ★ 이 파드들을 `Deployment`가 `ReplicaSet`한테 부탁해서 `ReplicaSet`아 pod를 3개 유지해줘!
-- https://bcho.tistory.com/1256 참고해보기.
 ![화면 캡처 2021-10-15 203321](https://user-images.githubusercontent.com/62214428/137480525-9888030a-9fee-48fd-bca0-eefa83e9a464.png)
+
+### Deployment - 컨트롤러 오브젝트 - 업데이트 예시로 자세히 살펴보자
+- ![화면 캡처 2021-10-16 164813](https://user-images.githubusercontent.com/62214428/137579009-b8fca9de-4aff-412e-a56d-bf51085f1c7c.png)
+- 마찬가지 작업을 반복하게 되면, 예전 버전의 Pod가 모두 빠지고 새 버전의 Pod만 서비스 되게 된다.
+- `RC => ReplicaSet`
+```
+만약에 배포가 잘못되었을 경우에는 기존 RC의 replica 수를 원래대로 올리고, 새버전의 replicat 수를 0으로 만들어서 예전 버전의 Pod로 롤백이 가능하다.
+
+이 과정은 kubectl rolling-update라는 명령으로 RC 단위로 컨트롤이 가능하지만, 그래도 여전히 작업이 필요하고, 배포 과정을 모니터링 해야 한다.
+그리고 가장 문제는 kubectl rolling-update 명령은 클라이언트에서 실행 하는 명령으로, 
+명령어 실행중에 클라이언트의 연결이 끊어 지면 배포작업이 비정상적으로 끊어질 수 있는 문제가 있다. 
+
+그리고 마지막으로, 롤백과정 역시 수동 컨트롤이 필요할 수 있다.
+
+그래서 이러한 과정을 자동화하고 추상화한 개념을 Deployment라고 보면 된다.
+
+Deployment는 Pod 배포를 위해서 RC를 생성하고 관리하는 역할을 하며, 
+특히 롤백을 위한 기존 버전의 RC 관리등 여러가지 기능을 포괄적으로 포함하고 있다. 
+```
+- https://bcho.tistory.com/1256 참고
 
 ### Deployment 명령어
 ![화면 캡처 2021-10-15 204353](https://user-images.githubusercontent.com/62214428/137481667-f8a9f375-a82e-47ce-9f70-6cb9a06b1f83.png)
