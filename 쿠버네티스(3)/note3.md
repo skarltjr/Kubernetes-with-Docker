@@ -96,7 +96,7 @@ kubectl apply -f kiseok.yaml
 - 아래 그림을 보자!! 
 - `Deployment`는 name = myapp / replicas = 3   => 그래서 pod를 3개 생성하는데
 - ★ 이 파드들을 `Deployment`가 `ReplicaSet`한테 부탁해서 `ReplicaSet`아 pod를 3개 유지해줘!
-- https://bcho.tistory.com/1256 
+- https://bcho.tistory.com/1256 참고해보기.
 ![화면 캡처 2021-10-15 203321](https://user-images.githubusercontent.com/62214428/137480525-9888030a-9fee-48fd-bca0-eefa83e9a464.png)
 
 ### Deployment 명령어
