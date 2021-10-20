@@ -169,5 +169,5 @@ rolebinding.rbac.authorization.k8s.io/kiseok-pod-reader created
 
 
 #### 10. 번외  serviceaccount
-![화면 캡처 2021-10-20 225639](https://user-images.githubusercontent.com/62214428/138107087-afba4d40-541c-411a-80ec-4c01db4d7e70.png)
+![화면 캡처 2021-10-20 230215](https://user-images.githubusercontent.com/62214428/138108096-825e39a9-b264-414e-a89a-7f9f95a37b61.png)
 - 여기서 `namespace:bar`인 애는 namespace가 foo랑 다르니 rolebinding이 안된다. 그래서 serviceaccount를 만들어서 요청하는 것(api를 호출)
