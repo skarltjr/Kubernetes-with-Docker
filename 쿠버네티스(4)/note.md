@@ -77,3 +77,21 @@
 - 이 방식을 쿠버네티스에서도 적용했는데 / 오른쪽 그림을 보자
 - Subject는 유저,사람   / Role은 역할이고 / Role에 따라 가능한 권한( resources, verb에 대한)을 미리 매핑
 - 그럼 이 subject에게 Role을 부여하는게 RoleBinding
+
+
+#### 4. Role / Cluster Role
+- 어떤 Resource에 어떤 verb 권한을??
+- 차이 : kind 에 들어가는 종류명, namespace 존재 여부 (범위만 다름)
+- `Cluster Role` 사용 예시 : 클러스터 관리자, 쿠버네티스 컨트롤러
+    - 왜냐면.. Cluster Role은 클러스터 전체를 관리하기 위한 Role/ 그래서 클러스터 관리자, 쿠버네티스 컨트롤러한테 부여하고 그냥 Role과 약간의 차이
+![화면 캡처 2021-10-20 221305](https://user-images.githubusercontent.com/62214428/138099650-228dcfcb-55e4-4bcf-8355-66a31b2d9baa.png)
+
+#### 5. Role을 만들어보자
+![화면 캡처 2021-10-20 221831](https://user-images.githubusercontent.com/62214428/138100596-c46dcf99-8602-4f9f-869d-b926301acb1d.png)
+- 명령어 연습도 필요하다
+- `1번`에서 뭘 쳐야하는지 몰라서 tap tap
+- `2번`에서 보니까 role이름이 필요하네?
+- `3번`에서 보니까 role에 부여할 verb가 필요하네?
+- `4번` 예시를 봐보자
+
+
