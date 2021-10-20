@@ -98,6 +98,12 @@ kubectl apply -f kiseok.yaml
 - ★ 이 파드들을 `Deployment`가 `ReplicaSet`한테 부탁해서 `ReplicaSet`아 pod를 3개 유지해줘!
 ![화면 캡처 2021-10-15 203321](https://user-images.githubusercontent.com/62214428/137480525-9888030a-9fee-48fd-bca0-eefa83e9a464.png)
 
+```
+ 조금 더 정리해보자면 
+ deployment는 우리가 파드를 하나씩 생성.. 등 다루는 것 보다 한 번에 다루는 것이 효율적이므로 파드들을 deployment단위로 다룬다.
+ replicaset은 이렇게 생성된 파드들이 삭제되거나 할 때 원래 개수를 유지시켜주는 등. 파드를 관리
+```
+
 ### Deployment - 컨트롤러 오브젝트 - 업데이트 예시로 자세히 살펴보자
 - ![화면 캡처 2021-10-16 164813](https://user-images.githubusercontent.com/62214428/137579009-b8fca9de-4aff-412e-a56d-bf51085f1c7c.png)
 - 마찬가지 작업을 반복하게 되면, 예전 버전의 Pod가 모두 빠지고 새 버전의 Pod만 서비스 되게 된다.
