@@ -94,4 +94,61 @@
 - `3번`에서 보니까 role에 부여할 verb가 필요하네?
 - `4번` 예시를 봐보자
 
+```
+--help를 분석해보자
+
+ # Create a Role named "pod-reader" that allows user to perform "get", "watch" and "list" on pods
+ pod-reader라는 이름의 Role을 만들건데 얘는 get watch list를 허용해줄거예요
+ 
+ 그러면 이렇게 치세요!
+  kubectl create role pod-reader --verb=get --verb=list --verb=watch --resource=pods
+  
+  -> resource와 verb를 묶어준 게 Role
+```
+
+![화면 캡처 2021-10-20 222524](https://user-images.githubusercontent.com/62214428/138101914-26b304d9-3f2d-47c2-8cdc-9a45ecf67a40.png)
+- yaml로 작성하였다!
+- 그러니 당연히 생성된 role이 없다고 뜬다
+
+#### 6. ClusterRole을 만들어보자
+- 똑같이 --help를 사용해보자
+
+```
+ # Create a ClusterRole named "pod-reader" that allows user to perform "get", "watch" and "list" on pods
+  kubectl create clusterrole pod-reader --verb=get,list,watch --resource=pods
+```
+- 그래서
+```
+create clusterrole pod-reader --verb=get,list,watch --resource=pods --dry-run=client -o yaml > pod-reader-cluster.yaml
+```
+
+#### 7. yaml을 만들어 뒀으니 apply로 Role을 생성하자
+![화면 캡처 2021-10-20 223513](https://user-images.githubusercontent.com/62214428/138103373-60f38378-e0c5-4f6d-b0d0-8ff3054d983f.png)
+
+
+#### 8. 여기까진 Role을 만든 것 / 이제 이 Role을 Subject와 연결하는 RoleBinding을 해주자
+- 어떤 Role을 사용자/그룹/Service Account에 연결. ‘어떤 resource에 어떤 verb 권한을,’ + ‘누구에게 줄 것인가?’
+- `RoleBinding`도 다 `create`해서 적용해야한다
+```
+  kubectl create rolebinding --help
+
+ # Create a RoleBinding for user1, user2, and group1 using the admin ClusterRole
+  kubectl create rolebinding admin --clusterrole=admin --user=user1 --user=user2 --group=group1
+  
+  혹은
+  
+  kubectl create rolebinding NAME --clusterrole=NAME|--role=NAME [--user=username] [--group=groupname] [--serviceaccount=namespace:serviceaccountname] [--dry-run=server|client|none] [options]
+```
+- 따로 유저가 없으니 우선 `service account`를 만들어보자
+- ![화면 캡처 2021-10-20 224258](https://user-images.githubusercontent.com/62214428/138104652-a73b1399-9c4c-420a-ac9e-f26607fccf6a.png)
+- 그럼 바로 위에 `kubectl create rolebinding NAME --clusterrole=NAME|--role=NAME [--user=username] [--group=groupname] [--serviceaccount=namespace:serviceaccountname] [--dry-run=server|client|none] [options]`을 적용해보자
+
+
+
+
+
+
+
+
+
 
