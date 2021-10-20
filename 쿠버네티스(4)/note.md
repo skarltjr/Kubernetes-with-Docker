@@ -143,10 +143,19 @@ create clusterrole pod-reader --verb=get,list,watch --resource=pods --dry-run=cl
 - ![화면 캡처 2021-10-20 224258](https://user-images.githubusercontent.com/62214428/138104652-a73b1399-9c4c-420a-ac9e-f26607fccf6a.png)
 - 그럼 바로 위에 `kubectl create rolebinding NAME --clusterrole=NAME|--role=NAME [--user=username] [--group=groupname] [--serviceaccount=namespace:serviceaccountname] [--dry-run=server|client|none] [options]`을 적용해보자
 
+```
+kubectl create rolebinding NAME --clusterrole=NAME|--role=NAME [--user=username] [--group=groupname] [--serviceaccount=namespace:serviceaccountname] [--dry-run=server|client|none] [options]
 
+을 활용하면
 
+kubectl create rolebinding kiseok-pod-reader --role=pod-reader --serviceaccount=default:kiseok 
 
+그럼
+rolebinding.rbac.authorization.k8s.io/kiseok-pod-reader created
+```
 
+- `binding`시켜주면
+![화면 캡처 2021-10-20 224845](https://user-images.githubusercontent.com/62214428/138105734-0fc62aee-946f-4872-b34c-0c3e9ed7dbee.png)
 
 
 
