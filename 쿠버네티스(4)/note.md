@@ -158,6 +158,16 @@ rolebinding.rbac.authorization.k8s.io/kiseok-pod-reader created
 ![화면 캡처 2021-10-20 224845](https://user-images.githubusercontent.com/62214428/138105734-0fc62aee-946f-4872-b34c-0c3e9ed7dbee.png)
 
 
+#### 9. 그럼 다시 이 그림을 봐보자
+![화면 캡처 2021-10-20 225150](https://user-images.githubusercontent.com/62214428/138106249-16bc8b71-ec15-4d8e-8994-316ba1412447.png)
+```
+ 1. 우리는 먼저 role과 clusterrole을 만들기 위한 yaml을 생성
+ 2. 이 yaml로 role을 생성
+ 3. role을 부여받을 subject = serviceaccount를 생성
+ 4. role을 부여해주는 binding -> rolebinding을 create  // yaml로 만든게 아니니 바로 적용
+```
 
 
+#### 10. 번외  serviceaccount
+![화면 캡처 2021-10-20 225639](https://user-images.githubusercontent.com/62214428/138107087-afba4d40-541c-411a-80ec-4c01db4d7e70.png)
 
