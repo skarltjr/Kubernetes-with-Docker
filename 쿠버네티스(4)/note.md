@@ -80,7 +80,7 @@
 
 
 #### 4. Role / Cluster Role
-- 어떤 Resource와 어떤 verb에  권한을??
+- 어떤 Resource와 어떤 verb에 대한 권한을??
 - 차이 : kind 에 들어가는 종류명, namespace 존재 여부 (범위만 다름)
 - `Cluster Role` 사용 예시 : 클러스터 관리자, 쿠버네티스 컨트롤러
     - 왜냐면.. Cluster Role은 클러스터 전체를 관리하기 위한 Role/ 그래서 클러스터 관리자, 쿠버네티스 컨트롤러한테 부여하고 그냥 Role과 약간의 차이
