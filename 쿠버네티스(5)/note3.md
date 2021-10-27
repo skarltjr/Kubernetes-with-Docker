@@ -99,4 +99,26 @@ pod
 -  즉 /var/lib/etcd =  현재의 etcd인 etcd가 1개 있고
 -  /var/lib/etcd-backup 이라는 etcd백업파일이 있는 총 두 개의 etcd가 있는 상황
 -  1. 현재 파드 etcd의 path를 백업용으로 갈아주기 위해 hostPath의 path를 `/var/lib/etcd-backup으로 변경
--  2. ★★★ `총괄 etcd 파드`가 1번 변경내용을 알기 위해서 path를 백업용으로 갈아주기 위해 volumeMounts의 mountPath를 `/var/lib/etcd-backup으로 변경 - 
+-  2. ★★★ `총괄 etcd 파드`가 1번 변경내용을 알기 위해서 path를 백업용으로 갈아주기 위해 volumeMounts의 mountPath를 `/var/lib/etcd-backup으로 변경 = > 정말중요
+
+
+
+### 8. static pod를 만들어보자
+`kubectl run --restart=Never --image=busybox static-busybox --dry-run=client -o yaml --command -- sleep 100 > static-busybox.yaml`
+- `command` = pod를 실행할 때 이 해당 pod에서만 동작하는 명령어를 추가하고싶다
+- 참고로 `--restart=Never` -> static pod니까
+- ![화면 캡처 2021-10-28 001232](https://user-images.githubusercontent.com/62214428/139094641-abce95a8-bd07-4004-a009-4abe4fa0fa47.png)
+- describe로 자세히 살펴볼 수 있다
+- ★★ 여기서 이 `static-busybox.yaml`을 `/etc/kubernetes/manifests에 cp만 해도 어떤일이 생길까?
+- ![화면 캡처 2021-10-28 002002](https://user-images.githubusercontent.com/62214428/139095919-e4130bd7-0b05-4242-970d-6af56dc0bfb1.png)
+- 2번처럼 cp만 했는데도 1,3번을 비교해보자 -> 새로운 `static pod`가 생겼다
+
+### 9. 그래서
+- static pod를 만들 때 위처럼 cp를 해서 만들고
+- 지울때도 `/etc/kubernetes/manifests`에서 `rm`으로 지우면 pod도 삭제된다
+-  ![화면 캡처 2021-10-28 002311](https://user-images.githubusercontent.com/62214428/139096528-9c235402-6586-40fd-a5e3-416c2fc03ac0.png)
+```
+1번처럼 이동해서
+2번 -> rm으로 yaml을 지웠는데
+3번 -> static pod가 삭제되었다!
+```
