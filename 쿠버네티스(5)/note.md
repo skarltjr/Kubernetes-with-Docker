@@ -111,9 +111,18 @@ disktype=ssd - 라는 라벨을
 - 짜잔~
 #### 참고로 라벨은 구분을 위한 그저 키/쌍 => 이걸로 무슨 데이터를 지정하거나 하는게 아니다
 
+### 3-2 policy 자세히 살펴보기 - Node Affinity
+- `Node Selector`는 선택에 대한 요구사항을 이야기하는 사전 조건 
+- 복잡한 선택에는 Affinity가 유연. (ex) 레이블 foo이면 A 또는 B 노드를 선택해주세요 - `유연함`
 
-
-
+1. pod를 생성할 yaml을 만들어보자
+![화면 캡처 2021-10-27 184217](https://user-images.githubusercontent.com/62214428/139041454-10074c5d-06a8-4189-8b9f-24febba4cff8.png)
+- `affinity`를 설정
+- 여기선 nodeSelector가 없다
+- 그런 상황에서 
+- `key: disktype`이 `values:ssd`인 쪽을 선호한다고 명시해준 것!!
+- 그럼 어디에 생성될까?
+- ![화면 캡처 2021-10-27 184238](https://user-images.githubusercontent.com/62214428/139041709-563b372b-5ad7-425c-ac11-1fe1ca752dac.png)
 
 
 
