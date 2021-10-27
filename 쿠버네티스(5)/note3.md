@@ -56,8 +56,13 @@ deployment로 관리하지 않는
 
 pod
 ```
-
-
+- ![화면 캡처 2021-10-27 232927](https://user-images.githubusercontent.com/62214428/139086316-9bfb4fe9-e98a-4ef2-819c-2d391b2fcd45.png)
+  - 1번을 통해 접근
+  - 2번의 여기 이 4개의 yaml로 생성된 pod들이 바로 `static pod`
+- ![화면 캡처 2021-10-27 233229](https://user-images.githubusercontent.com/62214428/139086909-486d2b0b-660b-4e78-9af7-8c62e1dff12b.png)
+  - 1번 / 2번 / 3번 / 4번 애들이 바로 그 static pod들
+  - 5번을 봐보자 
+  - static pod들은 다른 애들과 다르게 뒤에 이상한 이름이 붙지 않는다.
 
 
 
