@@ -84,3 +84,19 @@ pod
 ### 6. /var/lib/kubelet/config.yaml  -> kubelet을 살펴보자
 - kubelet이 이 static pod들을 관리한다고 했다
 - ![화면 캡처 2021-10-27 234409](https://user-images.githubusercontent.com/62214428/139089110-4d83be56-b2a2-4bcb-93f8-072b3985622d.png)
+
+
+### 7. 정말 중요한 etcd.yaml
+- `etcd`는 쿠버네티스의 정보를 담기에 매우 중요한데
+- 우선 /etc/kubernetes/manifests에서 etcd.yaml을 확인해보자
+- ![화면 캡처 2021-10-27 235814](https://user-images.githubusercontent.com/62214428/139091934-0f730f7b-00e7-4735-8907-19ccb8dc5052.png)
+- 표시한 부분이 왜 중요한지 살펴보자
+
+#### ex) 운용도중 문제가 생겼다. 그런데 이를 대비해서 어제까지의 정보가 담긴 백업파일이 있다.
+- 이 상황에서 쿠버네티스의 모든 정보를 담은 etcd를 백업파일의 etcd로 갈아끼워야한다.
+- 그러니까 지금 문제가 있는 우리의 `etcd`에서 -> 백업 `etcd`로 갈아끼우고자 하는데
+-  그 설정이 바로 위 그림에서 표시한 부분을 바꾸는 것
+-  즉 /var/lib에 현재의 etcd인 etcd가 1개 있고
+-  /var/lib/etcd-backup 이라는 etcd백업파일이 있는 총 두 개의 etcd가 있는 상황
+-  1. etcd의 path를 백업용으로 갈아주기 위해 hostPath의 path를 `/var/lib/etcd-backup으로 변경
+-  2. ★★★ `etcd 파드`가 1번 변경내용을 알기 위해서 path를 백업용으로 갈아주기 위해 volumeMounts의 mountPath를 `/var/lib/etcd-backup으로 변경 - 
