@@ -96,7 +96,7 @@ pod
 - 이 상황에서 쿠버네티스의 모든 정보를 담은 etcd를 백업파일의 etcd로 갈아끼워야한다.
 - 그러니까 지금 문제가 있는 우리의 `etcd`에서 -> 백업 `etcd`로 갈아끼우고자 하는데
 -  그 설정이 바로 위 그림에서 표시한 부분을 바꾸는 것
--  즉 /var/lib에 현재의 etcd인 etcd가 1개 있고
+-  즉 /var/lib/etcd =  현재의 etcd인 etcd가 1개 있고
 -  /var/lib/etcd-backup 이라는 etcd백업파일이 있는 총 두 개의 etcd가 있는 상황
--  1. etcd의 path를 백업용으로 갈아주기 위해 hostPath의 path를 `/var/lib/etcd-backup으로 변경
--  2. ★★★ `etcd 파드`가 1번 변경내용을 알기 위해서 path를 백업용으로 갈아주기 위해 volumeMounts의 mountPath를 `/var/lib/etcd-backup으로 변경 - 
+-  1. 현재 파드 etcd의 path를 백업용으로 갈아주기 위해 hostPath의 path를 `/var/lib/etcd-backup으로 변경
+-  2. ★★★ `총괄 etcd 파드`가 1번 변경내용을 알기 위해서 path를 백업용으로 갈아주기 위해 volumeMounts의 mountPath를 `/var/lib/etcd-backup으로 변경 - 
