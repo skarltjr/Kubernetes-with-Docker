@@ -122,8 +122,11 @@ disktype=ssd - 라는 라벨을
 - 그런 상황에서 
 - `key: disktype`이 `values:ssd`인 쪽을 선호한다고 명시해준 것!!
 - 그럼 어디에 생성될까?
+2. apply로 생성 후 확인해보기
 - ![화면 캡처 2021-10-27 184238](https://user-images.githubusercontent.com/62214428/139041709-563b372b-5ad7-425c-ac11-1fe1ca752dac.png)
 
+3. 참고용
+- ![화면 캡처 2021-10-27 184642](https://user-images.githubusercontent.com/62214428/139042160-01d8a0d4-8c20-4db6-b4aa-14fd897462bb.png)
 
 
 
