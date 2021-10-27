@@ -50,8 +50,75 @@ kubectl create deployment kiseok_deployment --image=nginx --dry-run=client -o ya
 - 파드가 노드에서 실행할 수 있다고 가정 후, 상대적 가치를 판단
 - ex) 이미지가 이미 존재하는 노드에 가중치를 부여 : 빠른 시작 가능
 - 동일한 Service 내 있는 파드라면 spreading 시켜놓음 = 한 노드에 몰리지 않도록 여러 노드에 분배하자!
+
 ※ 스케줄링은 한 순간에만 최적이므로, 이후 충돌 등 여러 이유로 실행중인 파드를 이동할 수 도 있음. 이 경우 해당 pod를 삭제하고 재 생성
+즉 파드가 이미 실행되었는데 다른 곳에 옮기는 것이 효율적이라면 
+삭제하고 다른곳에서 생성시킬 수 있다. 누가? 스케쥴러가
 ```
+
+### 3 policy 정책
+- `스케쥴러`의 방식말고 내가 직접 스케쥴링을 하고 싶은 경우
+![화면 캡처 2021-10-27 174757](https://user-images.githubusercontent.com/62214428/139032249-131beb98-fc0d-4e5b-82a5-1080b7f33af1.png)
+```
+1. node selector
+  - ex) 난 disktype이 ssd인 곳에만 pod를 생성할거야
+  - 명시적으로 어디만 가능한지 표기
+2. node affinity(선호)
+  - ex) 난 A,B 둘 다 가능한데. A를 선호해 되도록이면 A에 만든다
+ 
+우선 여기서 그림을 잠깐 보면 기본적으로 마스터 노드로는 안보낸다.
+ 
+그런데!!
+3. Taint/toleration
+마지막 3번을 보면 Toleration : node-role.kubernetes.io/master:NoSchedule라는  라벨이 들어감
+이 친구는 toleration. 마스터에 보내도 상관이 없다 나는~ 
+그래서 마스터노드로도 화살표가 있다. 가능하다
+
+일반적으로 taint(제약)을 걸어놓으면 스케쥴러는 그 쪽으로 배포를 안한다.
+여기서는 그 예시로 마스터노드가 taint를 걸어놓은 것
+그런데 toleration으로 나는 상관없다~ 아무곳에나 보내라 -> 제약에 상관 x
+그래서 master노드로도 갈 수 있다라는 설명
+참고로 taint는 워커 노드에도 설정할 수 있다
+```
+
+### 3-1 policy 자세히 살펴보기 - Node selector
+1. node selector
+![화면 캡처 2021-10-27 180041](https://user-images.githubusercontent.com/62214428/139034421-9220e9bc-2b8a-4f18-85bd-1e44595c73a0.png)
+```
+label - 라벨을 추가하겠다
+kubernetes-foo-node-1.c.a-robinson.internal - 이라는 노드에
+disktype=ssd - 라는 라벨을
+```
+
+2. 노드에 label추가
+![화면 캡처 2021-10-27 180536](https://user-images.githubusercontent.com/62214428/139035211-7cc4eca5-12fc-430e-a007-29b295cb8bbe.png)
+
+```
+1. 노드들 확인 / 이름 확인
+2. 워커노드 1에 라벨 추가
+3. describe로 해당 노드 자세히 살펴보면
+4. label이 추가되었다!
+```
+
+3. 새로 생성할 파드에 label을 지정해주면 진짜 위 노드(1번워커)에 생성될까?
+- 그러기 위해 우선 pod생성 할 yaml 생성
+- ![화면 캡처 2021-10-27 181110](https://user-images.githubusercontent.com/62214428/139036157-e1799b77-7250-4e89-bc5b-73db29763c33.png)
+- yaml을 수정해서 label을 추가해주자
+- ![화면 캡처 2021-10-27 181353](https://user-images.githubusercontent.com/62214428/139036682-3a7144f3-205e-4a32-a98e-bff3f729e113.png)
+- 이제 진짜 pod를 생성해보고 결과를 확인해보자 
+- 과연 워커노드 1에 배치될까?
+- ![화면 캡처 2021-10-27 181615](https://user-images.githubusercontent.com/62214428/139037094-27be6bc8-8395-4d35-b914-0ce63bd60428.png)
+- 짜잔~
+#### 참고로 라벨은 구분을 위한 그저 키/쌍 => 이걸로 무슨 데이터를 지정하거나 하는게 아니다
+
+
+
+
+
+
+
+
+
 
 
 
