@@ -25,8 +25,15 @@
 
 
 ### 2. Label과 Selector
-
-
+- 앞에서 `label`로 쿼리가 가능하다고 했다 ★
+- 즉 `label`로 특정한 것들만 뽑아낼 수 있다는 것
+- 해보고자 하는 것  = pod를 생성하되 label을 부여하고 이 라벨을 통해 해당 pod를 get해보자
+1. pod를 생성
+- `kubectl run label-pod --image=nginx -l teacher=osk --dry-run=client -o yaml > label.yaml`
+- label-pod라는 파드를 만들거야
+- `-l` = label옵션으로 teacher = osk라는 라벨을 붙일거야
+2. yaml확인
+- ![화면 캡처 2021-10-27 231941](https://user-images.githubusercontent.com/62214428/139084453-eb590cb7-8e45-4afe-b893-1201623ab618.png)
 
 
 
