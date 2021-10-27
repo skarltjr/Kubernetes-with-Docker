@@ -128,8 +128,8 @@ disktype=ssd - 라는 라벨을
 3. 참고용
 - ![화면 캡처 2021-10-27 184642](https://user-images.githubusercontent.com/62214428/139042160-01d8a0d4-8c20-4db6-b4aa-14fd897462bb.png)
 
-
-
+### 3-3 policy 자세히 살펴보기 - Taint/toleration
+![화면 캡처 2021-10-27 210739](https://user-images.githubusercontent.com/62214428/139062580-6a0936f7-fcfa-402a-9ee3-0737d2e8118b.png)
 
 
 
