@@ -60,11 +60,27 @@ pod
   - 1번을 통해 접근
   - 2번의 여기 이 4개의 yaml로 생성된 pod들이 바로 `static pod`
 - ![화면 캡처 2021-10-27 233229](https://user-images.githubusercontent.com/62214428/139086909-486d2b0b-660b-4e78-9af7-8c62e1dff12b.png)
-  - 1번 / 2번 / 3번 / 4번 애들이 바로 그 static pod들
+  - 1번 / 2번 / 3번 / 4번 애들이 바로 그 `static pod`들
   - 5번을 봐보자 
   - static pod들은 다른 애들과 다르게 뒤에 이상한 이름이 붙지 않는다.
 
+### 4. 도대체 static pod들은 어떻게 관리되는건가?
+- `kubectl get deployment -A`
+- `kubectl get replicaset -A`
+- 을 해봐도 앞선 1,2,3,4번을 관리하는 애들은 없다
+- ![화면 캡처 2021-10-27 233451](https://user-images.githubusercontent.com/62214428/139087463-e97db610-ef3b-410a-bab8-032e75ea6250.png)
+
+#### 이 static pod들은 yaml로 관리된다
+- `etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml` 이 yaml들로 관리되는 것
+- `/etc/kubernetes/manifests`에 존재
 
 
+### 5. 이 static pod들은 yaml을 통해 kubelet이 관리를 한다
+- etcd.yaml을 봐보자
+- 권한이 필요해서 sudo vi etcd.yaml
+- 이 `static pod`들은 kubelet이 `정적으로`관리
 
 
+### 6. /var/lib/kubelet/config.yaml  -> kubelet을 살펴보자
+- kubelet이 이 static pod들을 관리한다고 했다
+- ![화면 캡처 2021-10-27 234409](https://user-images.githubusercontent.com/62214428/139089110-4d83be56-b2a2-4bcb-93f8-072b3985622d.png)
