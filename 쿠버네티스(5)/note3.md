@@ -35,10 +35,27 @@
 2. yaml확인
 - ![화면 캡처 2021-10-27 231941](https://user-images.githubusercontent.com/62214428/139084453-eb590cb7-8e45-4afe-b893-1201623ab618.png)
 
+3. `kubectl get pod --selector 키 값`
+- ex) `kubectl get pod --selector teacher=osk`
+- ![화면 캡처 2021-10-27 232112](https://user-images.githubusercontent.com/62214428/139084828-a013dcd5-52df-49cc-b53d-a45ee6dcece0.png)
+- 즉 selector를 통해 label이 teacher=osk인 pod만 뽑아올 수 있었다.★
+- 참고로 `kubectl get pod -l teacher=osk`로 -l 라벨 옵션으로도 동일하게 동작
 
+4. `kubectl get all -l 키 값`
+- 3번에서는 get pod로 해당 label을 가진 pod만 가져왔는데
+- `all`은 pod뿐만 아니라 전체 오브젝트에서 해당 label을 가진 모든 것들을 가져온다
 
+### 3. Staticpod
+- Static pod(Manifest)는 `kubectl 및 control plane`에서 관리하지 않는 pod
+- pod spec을 디스크에 직접 쓸수 있으며, kubelet은 시작과 함께 바로 지정된 컨테이너를 시작
+- Kubelet은 지속적으로 변경사항이 있는지 Manifest 파일을 지속적으로 모니터링
+```
+즉 control plane에서 관리하지 않기 때문에
+지워져도 replicaset이 다시 생성한다거나 그러지 않는..
+deployment로 관리하지 않는
 
-
+pod
+```
 
 
 
