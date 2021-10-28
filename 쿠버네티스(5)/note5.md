@@ -46,13 +46,19 @@
 // 여전히 루트계정 
 #sudo yum	list	--showduplicates kubeadm --disableexcludes=kubernetes       // 리스트 한 번 확인해보고
 [2,3번 노드] #sudo yum	install	-y	kubeadm-1.22.1-0	--disableexcludes=kubernetes
-[2,3번 노드] #kubeadm upgrade	apply	v1.22.1
+[2,3번 노드] #kubeadm upgrade node                     // 이 부분이 1번과는 좀 다르다 -> 공식문서 참고
 [2,3번 노드] #kubectl uncordon master02번
 ```
 - 2번 끝나면 !!!! ★ 3번을 진행 -> 동시에 할 필요가 없다. 천천히 하자.... 
 
-
-
+### 3. master 1~3번 kubelet kubectl 
+```
+[1~3번 노드] #sudo yum	install	-y	kubelet-1.22.1-0	kubectl-1.22.1-0	--disableexcludes=kubernetes
+[1~3번 노드] #sudo systemctl daemon-reload	
+[1~3번 노드]	#sudo systemctl restart	kubelet
+[1~3번 노드] kubectl uncordon osk-master-01.kr-central-1.c.internal	osk-master-02.kr-central-1.c.internal	os
+k-master-03.kr-central-1.c.internal
+```
 
 
 
