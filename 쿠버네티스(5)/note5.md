@@ -61,14 +61,37 @@ k-master-03.kr-central-1.c.internal  // 모든 마스터 이제 업그레이드 
 ```
 
 
+### 4. worker node upgrade
+
+```
+루트 계정에서 
+[워커노드1,2] #sudo yum	install	-y	kubeadm-1.22.1-0	--disableexcludes=kubernetes
+[워커노드1,2] #sudo kubeadm upgrade node
+
+[centos@osk-master-01	~]$	kubectl drain	osk-worker-01.kr-central-1.c.internal	--ignore-daemonsets   // 마스터 1에서 워커1번 drain
+
+[워커노드1] #sudo yum	install	-y	kubelet-1.22.1-0	kubectl-1.22.1-0	--disableexcludes=kubernetes
+[워커노드1] #sudo systemctl daemon-reload
+[워커노드1] #sudo systemctl restart	kubelet
+
+[centos@osk-master-01	~]$	kubectl uncordon osk-worker-01.kr-central-1.c.internal    //마스터1에서 uncordon
+[centos@osk-master-01	~]$	kubectl get	nodes
+NAME STATUS	 ROLES AGE VERSION
+osk-master-01.kr-central-1.c.internal	 Ready control-plane,master 127m	 v1.22.1
+osk-master-02.kr-central-1.c.internal	 Ready control-plane,master 121m	 v1.22.1
+osk-master-03.kr-central-1.c.internal	 Ready control-plane,master 116m	 v1.22.1
+osk-worker-01.kr-central-1.c.internal	 Ready <none>	 105m	 v1.22.1
+osk-worker-02.kr-central-1.c.internal	 Ready <none>	 105m	 v1.21.0
+[워커노드2도 drain부터 반복
+```
 
 
 
 
 
 
-
-
+![화면 캡처 2021-10-28 233449](https://user-images.githubusercontent.com/62214428/139278018-d841065f-fe85-4a39-bc93-3ec618779226.png)
+끝~
 
 
 
