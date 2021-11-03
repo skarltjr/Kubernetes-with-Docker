@@ -123,7 +123,7 @@ spec:
 - 어떤 의미냐면 
 - `mountPath` => 이 yaml을 통해 생성된 컨테이너 test-pd안에 `/test-pd`경로의 디렉토리를
 - hostPath => `worker 02`의 `path( /data)`에 마운트 했다는 것
-- 즉★ 워커노드 02의 /data와 test-pd `pod` 내부 `/test-pd`가 연동
+- 즉★ `워커노드 02의 /data`와 `test-pd라는 pod 내부 /test-pd`가 연동
 - 이를 확인해보려면 
 - 1★ 워커노드 02의 `/data`에 파일을 만들어보고 
 - 2★ test-pd pod의 /test-pd에 동일한 파일이 있는지 확인해보면 된다
