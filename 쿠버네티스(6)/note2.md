@@ -57,6 +57,8 @@ spec:
   restartPolicy: Never
 ```
 - 여기서 `env`를 보면 configMap을 참조한다. / 이렇게 pod를 생성할 yaml을 작성할때도 사용할 수 있다.
+- 환경변수 `SPECIAL_LEVEL_KEY`은 `configmap의 SPECIAL_LEVEL이라는 키를 활용하여 값을 가져올 것`
+- 환경변수 `SPECIAL_TYPE_KEY`은 `configmap의 SPECIAL_TYPE이라는 키를 활용하여 값을 가져올 것`
 - 그럼 진짜 `configmap`을 참조했는지 pod를 만들고 `log`를 확인해보자
 - 먼저 예상결과는 `command: [ "/bin/echo", "$(SPECIAL_LEVEL_KEY) $(SPECIAL_TYPE_KEY)" ]`에서 변수들을 `configmap`에서 참조하니까 
 - 아마도 `very charm`이 나올 것
