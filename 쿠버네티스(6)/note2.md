@@ -32,7 +32,7 @@ data:
 
 ### 3. configMap의 사용예시 
 - 이미지는 같은 파든데 파드마다 config는 다르게해야하는 경우.
-- 혹은 pod를 생성할 때 `envFrom`
+- 혹은 pod를 생성할 때 외부에 빼둔 configMap을 참조
 ```
 apiVersion: v1
 kind: Pod
