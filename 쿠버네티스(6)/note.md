@@ -48,9 +48,54 @@
    - 4번 = 파일 시스템은 리눅스에서 많이 쓰는 `xfs` 뒤에는 디폴트 옵션
 
 - 정리하자면 `볼륨`도 결국 `스토리지`인데 `하나의 파일 시스템을 갖춘` 
+- 참고로 여러개의 작은 용량의 디스크를 묶어서 하나의 볼륨으로 만들어 사용할 수 있다.
 
+### 4. PV / PVC
+![화면 캡처 2021-11-03 212305](https://user-images.githubusercontent.com/62214428/140059253-334b7a7f-f813-496f-b236-de245975b7e0.png)
+- `PV` = 스토리지
+- `PVC` = 스토리지를 원한다는 요청. 클레임
 
+### 5. PV를 생성해보자
+- PV 생성: https://kubernetes.io/ko/docs/concepts/storage/volumes/#hostpath
+- 그 중 hostpath방법
+```
+hostpath pv생성을 위한 yaml
 
+apiVersion: v1
+kind: Pod      // pv 또한 하나의 pod로 생성하고
+metadata:
+  name: test-pd
+spec:
+  containers:
+  - image: k8s.gcr.io/test-webserver      // 해당 이미지를 사용하고
+    name: test-container
+    volumeMounts:
+    - mountPath: /test-pd
+      name: test-volume
+  volumes:           // 이 볼륨을 생성하여 위에서 바로 위에서 마운트를 설정
+  - name: test-volume
+    hostPath:
+      # 호스트의 디렉터리 위치
+      path: /data
+      # 이 필드는 선택 사항이다
+      type: Directory
+```
+- 1. kubectl apply -f hostpath.yaml -> 계속 pod가 생성이 대기중
+  - ![화면 캡처 2021-11-03 213547](https://user-images.githubusercontent.com/62214428/140061033-68f1235f-307a-4c88-beec-cf55cb522d00.png)
+- 2. kubectl get pod -o wide
+  - ![화면 캡처 2021-11-03 213815](https://user-images.githubusercontent.com/62214428/140061399-d12ea746-a38c-4f7e-b729-9a18baaca025.png)
+  - 2번 워커노드에 띄우려고 하는데 문제가 있는 것 같다.
+- 3. 왜 그런지 알아야하니까 자세히 살펴보자 `kubectl describe pod test-pd`
+  - ![화면 캡처 2021-11-03 213707](https://user-images.githubusercontent.com/62214428/140061258-ee59d62e-f45e-4aea-955e-2fabb1106c2e.png)
+  - yaml을 다시 확인해보면 `volume`의 path가 /data인 것을 확인할 수 있다.
 
+- 4. `워커노드 2번`에 /data가 있는지 확인을 해보자
+  - 없다면 없으니까 실패하고 대기중인것 -> 만들어줘야겠지
+  - ![화면 캡처 2021-11-03 214033](https://user-images.githubusercontent.com/62214428/140061688-3dd71fa0-e0f3-48bf-bdc9-34ca513154c2.png)
+  - 없다!! 그러니까 볼륨을 못잡고 대기중인것
+
+- 5. /data를 만들어주자
+  - 워커노드 2번 루트 하위에 mkdir data로 만들어주면
+  - ![화면 캡처 2021-11-03 214145](https://user-images.githubusercontent.com/62214428/140061859-577f2e32-f4c5-43d5-bac4-9faf7f0a4296.png)
 
 
