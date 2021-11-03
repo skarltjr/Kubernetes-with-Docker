@@ -5,4 +5,28 @@
 
 ### 1. Config Map을 생성해보자
 - https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables
-- 
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: special-config  
+  namespace: default
+data:
+  SPECIAL_LEVEL: very
+  SPECIAL_TYPE: charm
+```
+- `data`를 보면 `SPECIAL_LEVEL : very`  == `키 : 값`
+- `namespace`는 디폴트
+- 이름은 `special-config`
+- ![화면 캡처 2021-11-03 230610](https://user-images.githubusercontent.com/62214428/140075289-a6c1032e-089d-4429-9030-55e48131c6c4.png)
+
+### 2. ConfigMap의 사용이유를 다시 생각해보자
+```
+- 컨피그맵은 키-값 쌍으로 기밀이 아닌 데이터를 저장하는 데 사용하는 API 오브젝트
+- 컨테이너에 필요한 환경 설정 내용을 컨테이너 `내부가 아닌 외부`에 분리하는데 용이
+```
+- config를 파드마다 일일이 생성해서 파드 내부에서 관리할 수도있지만
+- ![화면 캡처 2021-11-03 231032](https://user-images.githubusercontent.com/62214428/140076166-5ff35412-17ea-4fff-adfc-06449b88d96a.png)
+- 그림처럼 configmap을 외부에서 만들어 관리하며 파드를 생성할 때 값만 넣어주며 사용하는 등.. 처럼 사용할 수 있다.
+- 예를 들어 이미지는 같은 파든데 파드마다 config는 다르게해야하는 경우.
+
