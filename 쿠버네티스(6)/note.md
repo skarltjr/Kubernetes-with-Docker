@@ -33,8 +33,8 @@
    - DISK 2 = A3, `BP`, C2, D2
    - DISK 3 = `AP`, B3, C3, D3
    - 어떤식으로 활용되는가?
-   - EX) D 관점으로 봤을 때 만약 `DISK 1`이 죽으면 DISK 0의 DP에 DISK 1의 D1을 복구
-   - EX) C 관점으로 봤을 때 만약 `DISK 0`이 죽으면 DISK 1의 CP에 DISK 0의 C1을 복구... 이런식
+   - EX) D 관점으로 봤을 때 만약 `DISK 1`이 죽으면 `DP D2 D3를 활용해서` DISK 0의 DP에 DISK 1의 D1을 복구
+   - EX) C 관점으로 봤을 때 만약 `DISK 0`이 죽으면 `CP C2 C3를 활용해서` DISK 1의 CP에 DISK 0의 C1을 복구... 이런식
 
 
 
