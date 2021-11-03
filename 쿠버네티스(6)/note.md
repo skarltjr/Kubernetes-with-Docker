@@ -134,3 +134,12 @@ spec:
 2. `test-pd` pod에 접속하여 `/test-pd`에 `likelion`이 있는지 확인해보면
 - ![화면 캡처 2021-11-03 215604](https://user-images.githubusercontent.com/62214428/140063827-933f5e25-09d9-4d70-9ae4-2a00268d3082.png)
 3. 짜잔~. 
+
+### 8. 그럼 만약 이 pod를 지우면 마운트된 host(여기선 워커노드 2)의 공간도 없어지나?
+1. pod를 먼저 지워보자
+- ![화면 캡처 2021-11-03 220048](https://user-images.githubusercontent.com/62214428/140064528-566243b1-75bc-41b3-bec9-c3bcd2f1334a.png)
+2. 워커노드 2번의 `/data`가 존재할까?
+- 여전히 그대로 존재한다
+- ![화면 캡처 2021-11-03 220136](https://user-images.githubusercontent.com/62214428/140064644-b8515da8-c726-413d-8fd7-e803e1e1ac50.png)
+3. volume이니까 당연히 pod가 지워져도 volume은 살아있다.
+4. 도커도 컨테이너 띄울 때 볼륨 설정해주면 컨테이너 지워도 volume은 살아있었다.
