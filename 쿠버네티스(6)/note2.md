@@ -30,3 +30,25 @@ data:
 - 그림처럼 configmap을 외부에서 만들어 관리하며 파드를 생성할 때 값만 넣어주며 사용하는 등.. 처럼 사용할 수 있다.
 - 예를 들어 이미지는 같은 파든데 파드마다 config는 다르게해야하는 경우.
 
+### 3. configMap의 사용예시 
+- 이미지는 같은 파든데 파드마다 config는 다르게해야하는 경우.
+- 혹은 pod를 생성할 때 `envFrom`
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: k8s.gcr.io/busybox
+      command: [ "/bin/sh", "-c", "env" ]
+      envFrom:
+      - configMapRef:
+          name: special-config
+  restartPolicy: Never
+```
+- 여기서 `envFrom`을 보면 configMap을 참조한다. / 이렇게 pod를 생성할 yaml을 작성할때도 사용할 수 있다.
+- 그럼 진짜 `configmap`을 참조했는지 pod를 만들고 `log`를 확인해보자
+- ![화면 캡처 2021-11-03 232401](https://user-images.githubusercontent.com/62214428/140078679-7968d02d-c84b-4cc1-aeff-91a814982853.png)
+
