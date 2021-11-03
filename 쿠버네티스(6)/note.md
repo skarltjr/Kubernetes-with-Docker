@@ -67,7 +67,7 @@ metadata:
   name: test-pd
 spec:
   containers:
-  - image: k8s.gcr.io/test-webserver      // 해당 이미지를 사용하고
+  - image: nginx      // 해당 이미지를 사용하고
     name: test-container
     volumeMounts:
     - mountPath: /test-pd
@@ -98,4 +98,39 @@ spec:
   - 워커노드 2번 루트 하위에 mkdir data로 만들어주면
   - ![화면 캡처 2021-11-03 214145](https://user-images.githubusercontent.com/62214428/140061859-577f2e32-f4c5-43d5-bac4-9faf7f0a4296.png)
 
+### 6. yaml을 자세히 살펴보자
+```
+apiVersion: v1
+kind: Pod      // pv 또한 하나의 pod로 생성하고
+metadata:
+  name: test-pd
+spec:
+  containers:
+  - image: nginx      // 해당 이미지를 사용하고
+    name: test-container
+    volumeMounts:
+    - mountPath: /test-pd
+      name: test-volume
+  volumes:           // 이 볼륨을 생성하여 위에서 바로 위에서 마운트를 설정
+  - name: test-volume
+    hostPath:
+      # 호스트의 디렉터리 위치
+      path: /data
+      # 이 필드는 선택 사항이다
+      type: Directory
+```
+- 여기서 자세히봐야할게 volumeMounts / volumes
+- 어떤 의미냐면 
+- `mountPath` => 이 yaml을 통해 생성된 컨테이너 test-pd안에 `/test-pd`경로의 디렉토리를
+- hostPath => `worker 02`의 `path( /data)`에 마운트 했다는 것
+- 즉★ 워커노드 02의 /data와 test-pd `pod` 내부 `/test-pd`가 연동
+- 이를 확인해보려면 
+- 1★ 워커노드 02의 `/data`에 파일을 만들어보고 
+- 2★ test-pd pod의 /test-pd에 동일한 파일이 있는지 확인해보면 된다
 
+### 7. 확인해보자
+1. 워커노드 2번의 `/data`에서 파일생성
+- ![화면 캡처 2021-11-03 215442](https://user-images.githubusercontent.com/62214428/140063650-84b37624-485b-419d-bc4b-ad8edf47874d.png)
+2. `test-pd` pod에 접속하여 `/test-pd`에 `likelion`이 있는지 확인해보면
+- ![화면 캡처 2021-11-03 215604](https://user-images.githubusercontent.com/62214428/140063827-933f5e25-09d9-4d70-9ae4-2a00268d3082.png)
+3. 짜잔~. 
