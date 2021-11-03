@@ -42,13 +42,24 @@ spec:
   containers:
     - name: test-container
       image: k8s.gcr.io/busybox
-      command: [ "/bin/sh", "-c", "env" ]
-      envFrom:
-      - configMapRef:
-          name: special-config
+      command: [ "/bin/echo", "$(SPECIAL_LEVEL_KEY) $(SPECIAL_TYPE_KEY)" ]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: SPECIAL_LEVEL
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: SPECIAL_TYPE
   restartPolicy: Never
 ```
-- 여기서 `envFrom`을 보면 configMap을 참조한다. / 이렇게 pod를 생성할 yaml을 작성할때도 사용할 수 있다.
+- 여기서 `env`를 보면 configMap을 참조한다. / 이렇게 pod를 생성할 yaml을 작성할때도 사용할 수 있다.
 - 그럼 진짜 `configmap`을 참조했는지 pod를 만들고 `log`를 확인해보자
-- ![화면 캡처 2021-11-03 232401](https://user-images.githubusercontent.com/62214428/140078679-7968d02d-c84b-4cc1-aeff-91a814982853.png)
+- 먼저 예상결과는 `command: [ "/bin/echo", "$(SPECIAL_LEVEL_KEY) $(SPECIAL_TYPE_KEY)" ]`에서 변수들을 `configmap`에서 참조하니까 
+- 아마도 `very charm`이 나올 것
+- ![화면 캡처 2021-11-03 232954](https://user-images.githubusercontent.com/62214428/140079791-12aa1d51-239f-4b60-8c5b-24d4a0d38d77.png)
+
 
