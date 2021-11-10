@@ -212,10 +212,15 @@ spec:
 - 5. ingress 설정정보 (minimal-ingress.yaml)생성 후 적용
 - 6. 결과적으로 어떤 노드로 접근하든 http로 특정포트(get svc -A로 확인)로 접근하는 경우 ingress 설정 정보에 따라 특정 service(my-nginx)로 로드밸런싱하고 이 서비스는 특정 파드(deployment로만든)로 로드밸런싱하여 마지막에 우리는 nginx가 동작하는 pod를 ★외부에서 접근할 수 있게되었다
 - 외부 ->ingress -> service ->pod 
+- 근데 참고로 당연히 1번 파드일지 2번 파드로갈지는 쿠버네티스가 알아서 판단한다.
 
 
 
+----
 
+![화면 캡처 2021-11-10 185452](https://user-images.githubusercontent.com/62214428/141091358-c0208bb8-a590-4faa-a8c3-66fb8477af49.png)
+- 참고로 우리는 nodeport로 했기 때문에 선택적 호스트 내용이 없던것 / 그래서 경로가 다 ip
+- 나중에 dns가 가능한경우 선택적 호스트도 유용
 
 
 
