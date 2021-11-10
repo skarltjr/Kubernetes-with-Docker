@@ -28,7 +28,7 @@
   - 그러니까 결국 kubeproxy도 iptables, netfilter같은 OS와 관련된 것들을 활용하여 변환을 가능하도록한다.
 
 
-### 직접 실습해보자
+### 직접 서비스를 생성해보자.
 1. deployment 구성
 ```
 apiVersion: apps/v1
@@ -60,10 +60,36 @@ spec:
 ![화면 캡처 2021-11-10 125858](https://user-images.githubusercontent.com/62214428/141047351-bd8ef0f1-8f0b-44fd-9715-3466a402f6b5.png)
 - `expose`명령어를 활용하면 ex) `kubectl expose deployment my-nginx`
 - my-nginx라는 deployment에 대해 서비스를 만들고 연결해주세요! ( --name옵션을 통해 서비스 이름지정가능)
-- 
+- ![화면 캡처 2021-11-10 135501](https://user-images.githubusercontent.com/62214428/141052290-4d856caa-b4e2-4ba6-9936-9ef275ee21e0.png)
 
+------
 
+## DNS
+- 도메인 네임 시스템(Domain Name System, DNS)은 호스트의 도메인 이름을 호스트의 네트워크 주소로 바꾸거나 그 반대의 변환을 수행할 수 있도록 하기 위해 개발되었다
+- 우리가 구글의 ip가 아닌 www.google.com으로 접속할 수 있는 이유
+- ![화면 캡처 2021-11-10 140226](https://user-images.githubusercontent.com/62214428/141052970-3063ef2b-e011-474d-8cdf-3dc570d7e1f5.png)
 
+1. 쿠버네티스는 디폴트로 CoreDns를 사용한다
+- ![화면 캡처 2021-11-10 140506](https://user-images.githubusercontent.com/62214428/141053228-ffb8b170-d763-4763-a9a7-748bbcc71c4b.png)
+
+2. ★ 이 coreDns가 어떻게 사용되는지 확인해보자
+![화면 캡처 2021-11-10 141505](https://user-images.githubusercontent.com/62214428/141054146-c6bdc47c-51dd-4d42-b650-86d758aa7652.png)
+- `1번` = 현재 service 출력
+- `2번` = 간단하게 pod 생성 
+- `3번`★
+   - `nslookup` = 리눅스의 기본적인 도메인,ip를 물어보는 명령어
+   - 현재 생성된 파드에서 nslokkup을 통해 my-nginx 서비스에 접근 방법을 알아보면
+   - 여기서!!★ server와 address를 보면 쿠버네티스 dns인 coreDns로부터 해당 정보를 받아온 것을 알 수 있다.(get svc -A 결과를 비교해서보면)
+   - 생각해보자. 원래 dns가 루트 -> 최상위 도메인 ->... ->구체적인도메인까지 접근해서 정보를 받아오고 루트가 이를 나에게 전달해주는 것. 바로 위설명 또한 마찬가지
+- 정리★
+   - 우리가 찾고자하는것은 my-nginx서비스에 접근하기위한 정보입니다!
+   - 그래서 루트에게 물어봤더니 `Name:   my-nginx.default.svc.cluster.local`이고 `Address: 10.100.187.202`라고 알려줬어요 (get svc -A에서 확인한 my-nginx 서비스와 동일한것을 확인가능)
+   - 그리고 이 루트는 `10.96.0.10`ip를 가진 `kube-dns`이네요!
+
+### 이게 어떻게 가능한가?
+- `deployment`를 생성 후 `expose`를 통해 `my-nginx`라는 서비스를 생성하여 `deployment`와 연결
+- 이런 정보들을 kube-dns(coreDns)와 계속 주고 받았기에 
+- 나중에 임시적으로 파드하나 띄워서 nslookup으로 서비스 정보를 받아오는게 가능한 것
 
 
 
