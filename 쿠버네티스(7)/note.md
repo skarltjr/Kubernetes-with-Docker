@@ -137,15 +137,15 @@ spec:
 --------
 
 ## Ingress Controller
-1. 설치하기
+#### 1. 설치하기
   - https://kubernetes.github.io/ingress-nginx/deploy/#bare-metal-clusters
   - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.4/deploy/static/provider/baremetal/deploy.yaml를 실행
-2. 확인하기
+#### 2. 확인하기
   - nodePort를 사용
   - ![화면 캡처 2021-11-10 181027](https://user-images.githubusercontent.com/62214428/141084090-27d348e6-0bf4-4ff8-b742-109e5b720aab.png)
   - ![화면 캡처 2021-11-10 181203](https://user-images.githubusercontent.com/62214428/141084334-555f11e4-7821-4bfa-bb8a-2f43f0d26d3e.png)
 
-3. 정리하고 가보자
+#### 3. 정리하고 가보자
   - deployment로 pod 생성했고
   - expose를 통해 my-nginx서비스 생성 후 pod와 연결했고
   - Ingress를 수행할 Ingress Controller 설치완료
@@ -153,13 +153,65 @@ spec:
   - 그러면 이제 Ingress Controller에 minimal-ingress.yaml을 넣으면 yaml에서 지정한대로 외부에서도 ~/testpath로 접근하면 my-nginx서비스로 로드밸런싱이 될 것
 
 
-4. 그럼이제 minimal-ingress.yaml을 적용해보자
+#### 4. 그럼이제 minimal-ingress.yaml을 적용해보자
+1. 적용
+- ![화면 캡처 2021-11-10 181822](https://user-images.githubusercontent.com/62214428/141085338-f1e8322e-6b43-4dd3-b2f1-71a8d1214765.png)
+- kubectl apply -f 를 통해 ingress 설정 정보인 minimal-ingress.yaml을 적용했다.
 
+2. 확인
+- 그런데 생각해보면 어디로 접근했을 때 ingress가 수행되는걸까?
+- 앞에서 Ingress Controller가 `nodePort`를 사용한다고 했다
+- `nodePort`는 클러스터내의 `어떤 노드의 IP든` 특정 포트로 들어오면 해당 서비스로  로드밸런싱해준다고 했다
+- 그러니까 마스터n이든 워커n이든 특정 노드로만 접속하면 된다는건데
 
+3. 접속
+- ![화면 캡처 2021-11-10 182443](https://user-images.githubusercontent.com/62214428/141086356-1e2cbad7-47cc-4f4b-a7a2-f3151c3bd14c.png)
+- 위에서 말한 특정 포트가 32261이라는것을 확인★
+- 그럼 일단 마스터노드1 ip:32261로 접근해보면
+- ![화면 캡처 2021-11-10 182553](https://user-images.githubusercontent.com/62214428/141086515-4b941df0-67b3-4ae0-8dd0-6b4645d6541e.png)
+- 워커1 ip:32261로 접근해보면
+- ![화면 캡처 2021-11-10 182731](https://user-images.githubusercontent.com/62214428/141086767-293504b9-5498-4c18-9db5-d4c76d184cde.png)
+- 접근이 되는것을 확인했다 ★
+- 그런데 원한건 nginx페이지이고 우리가 놓친게 있지 않은가?
+- 바로 `/testpath`
+- 그런데 /testpath해도 안된다??
+- ![화면 캡처 2021-11-10 183432](https://user-images.githubusercontent.com/62214428/141087884-d0da7361-87ca-4430-b647-1219719b42b7.png)
 
+4. 해결
+- https://kubernetes.github.io/ingress-nginx/
+- ![화면 캡처 2021-11-10 183542](https://user-images.githubusercontent.com/62214428/141088088-1bcb06c2-309a-4b1f-a11b-205eeed26103.png)
+- 마침 이전에 쿠버네티스를 v1.22로 업그레이드 했었고 해당 버전에서는 ingressclass가 꼭 필요하다고 한다.
+- 그리고 우리는 ingress controller가 1개인 상황이고 이 상황에서 공식문서는 아래를 생성하길 추천한다고한다.
+```
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+  name: nginx
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: k8s.io/ingress-nginx
+```
+- ![화면 캡처 2021-11-10 184332](https://user-images.githubusercontent.com/62214428/141089453-036246bf-6b71-4295-9437-5b5116dfe574.png)
+- 여기서부터 집중 ★
+- 1번 = `ingressClass.yaml`생성 후 apply한다.
+- 2번~3번 = 이전 설정정보로 적용한 minial-ingress를 지우고
+- 4번 = 다시 ingress 설정정보를 생성하여 ingressController에게 넣는다.
 
+5. 재확인
+- 그럼 이제 /testpath로 접근해보면
+- ![화면 캡처 2021-11-10 184533](https://user-images.githubusercontent.com/62214428/141089777-9a06182f-012f-47da-ba7f-0172cbe0c287.png)
 
-
+6. 정리
+- 1. deployment로 pod를 생성
+- 2. expose로 서비스(my-nginx) 생성 후 pod와 연결
+- 3. ingress를 위해 ingressController설치
+- 4. 버전 이슈로 ingressclass 적용
+- 5. ingress 설정정보 (minimal-ingress.yaml)생성 후 적용
+- 6. 결과적으로 어떤 노드로 접근하든 http로 특정포트(get svc -A로 확인)로 접근하는 경우 ingress 설정 정보에 따라 특정 service(my-nginx)로 로드밸런싱하고 이 서비스는 특정 파드(deployment로만든)로 로드밸런싱하여 마지막에 우리는 nginx가 동작하는 pod를 ★외부에서 접근할 수 있게되었다
+- 외부 ->ingress -> service ->pod 
 
 
 
