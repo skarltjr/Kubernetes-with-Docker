@@ -97,13 +97,63 @@ spec:
 
 
 
+----------
+## Ingress★
+- `클러스터 내의 서비스★에 대한` 외부 접근을 관리하는 API 오브젝트이며, 일반적으로 HTTP를 관리함.
+- ![화면 캡처 2021-11-10 173856](https://user-images.githubusercontent.com/62214428/141078974-c3d82978-14a8-4714-b671-255f6ced9853.png)
+- ![화면 캡처 2021-11-10 174002](https://user-images.githubusercontent.com/62214428/141079122-049fd2fa-e517-4f17-9df3-a2a46bed9f28.png)
+- `service` 중 `ClusterIp`는 클러스터내에서의 통신을 위한 서비스로 마스터노드는 클러스터의 구성원이라 curl로 접근가능하지만 크롬으로 해보면 당연히 안된다.  
+
+### 외부에서 Http로 서비스에 접근할 수 있도록 Ingress를 설정해보자
+- `minimal-ingress.yaml`
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /testpath
+        pathType: Prefix
+        backend:
+          service:
+            name: my-nginx
+            port:
+              number: 80
+              
+```
+- ingress는 http를 대상으로 로드밸런싱
+- ★path = http~/testpath에 대해서 !!
+- ★service/name = my-nginx 서비스로 로드밸런싱하겠다!!
+
+### ★그런데 지금 이 yaml이 로드밸런싱을 하는게 아니다. 이건 로드밸런싱 정보
+### ★진짜 로드밸런싱을 수행하는 것은 Ingress Controller
+- ![화면 캡처 2021-11-10 175930](https://user-images.githubusercontent.com/62214428/141082272-9b6877dc-7fa3-4631-8017-a8b3c7f57e0d.png)
+
+--------
+
+## Ingress Controller
+1. 설치하기
+  - https://kubernetes.github.io/ingress-nginx/deploy/#bare-metal-clusters
+  - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.4/deploy/static/provider/baremetal/deploy.yaml를 실행
+2. 확인하기
+  - nodePort를 사용
+  - ![화면 캡처 2021-11-10 181027](https://user-images.githubusercontent.com/62214428/141084090-27d348e6-0bf4-4ff8-b742-109e5b720aab.png)
+  - ![화면 캡처 2021-11-10 181203](https://user-images.githubusercontent.com/62214428/141084334-555f11e4-7821-4bfa-bb8a-2f43f0d26d3e.png)
+
+3. 정리하고 가보자
+  - deployment로 pod 생성했고
+  - expose를 통해 my-nginx서비스 생성 후 pod와 연결했고
+  - Ingress를 수행할 Ingress Controller 설치완료
+  - Ingress정보를 위한 `minimal-ingress.yaml`작성 완료
+  - 그러면 이제 Ingress Controller에 minimal-ingress.yaml을 넣으면 yaml에서 지정한대로 외부에서도 ~/testpath로 접근하면 my-nginx서비스로 로드밸런싱이 될 것
 
 
-
-
-
-
-
+4. 그럼이제 minimal-ingress.yaml을 적용해보자
 
 
 
