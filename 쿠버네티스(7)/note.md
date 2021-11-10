@@ -90,6 +90,11 @@ spec:
 - `deployment`를 생성 후 `expose`를 통해 `my-nginx`라는 서비스를 생성하여 `deployment`와 연결
 - 이런 정보들을 kube-dns(coreDns)와 계속 주고 받았기에 
 - 나중에 임시적으로 파드하나 띄워서 nslookup으로 서비스 정보를 받아오는게 가능한 것
+- 참고로
+- ![화면 캡처 2021-11-10 142858](https://user-images.githubusercontent.com/62214428/141055358-f387bbf1-55e6-4634-ba2a-b96d96e03e75.png)
+- `cat /etc/resolve.conf`는 리눅스에선 해당 dns서버에서 도메인,ip의 매핑관계 정보를 받아오겠다!
+- `10.96.0.10` 어디서본 것 같은데? -> 바로 coreDns 
+
 
 
 
