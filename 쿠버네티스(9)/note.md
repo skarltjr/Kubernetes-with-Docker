@@ -13,8 +13,9 @@
 정말 중요한 내용이다. 
 쿠버네티스의 구조를 pod 생성 과정과 함께 고려해보자 
 1. api server를 통해 pod생성 요청을 받을 것이다
-2. etcd와 소통
-3. 스케쥴러를 통해 어디에 pod를 생성할지 결정했을 것
+2. APIServer는 etcd에 Node에 할당되지 않은 Pod이 있음을 업데이트
+3. Scheduler는 etcd의 변경사항을 API Server를 통해 watch하고 Pod을 실행할
+ Node를 선택해 API Server에 해당 Node에 Pod을 배정하도록 업데이트
 --- 
 ★여기까진 control plane에 대한것이다
 결국 pod가 생성되는 곳은 워커노드
