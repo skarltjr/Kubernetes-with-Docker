@@ -37,6 +37,14 @@ kubectl create deployment kiseok_deployment --image=nginx --dry-run=client -o ya
 4. 각 노드의 kubelet들은 apiserver를 쭉 지켜보다가
    - 3번 워커노드의 쿠블렛은 아! 내꺼네 생성해야겠다
 ```
+- 좀 더 자세히보자면
+```
+1. kubectl은 API Server에 Pod생성을 요청
+2. APIServer는 etcd에 Node에 할당되지 않은 Pod이 있음을 업데이트
+3. Scheduler는 etcd의 변경사항을 API Server를 통해 watch하고 Pod을 실행할 Node를 선택해 API Server에 해당 Node에 Pod을 배정하도록 업데이트
+4. 해당 Node의 Kubelet은 생성할 Pod정보를 watch해서 Docker 컨테이너를 실행하고 결과를 API Server에 지속적으로 업데이트
+5. API Server는 전달받은 Pod의 상태를 etcd에 업데이트
+```
 
 ### 2-1 스케쥴링 프로세스
 ```
