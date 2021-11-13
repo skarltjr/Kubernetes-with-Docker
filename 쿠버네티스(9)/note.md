@@ -60,7 +60,7 @@ ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kuberne
 1. sudo su -
 2. tmp에 복구할 파일 wget으로 받고 // 혹은 실제라면 백업파일을 tmp에 저장해놨다는 상황
 3. `kubectl describe pod -n kube-system etcd-nks-master-01.kr-central-1.c.internal`
-4. 위에서 describe한 내용 맞춰서 아래 작성 ( ex)  --data-dir /var/lib/etcd-kiseok-backup 처럼 따로 공간할당)
+4. 위에서 describe한 내용 맞춰서 아래 작성 ( ex)  --data-dir /var/lib/etcd-kiseok-backup 처럼 따로 공간할당 - 이는 본인 맘대로 지정)
    - 아래는 ip, data-dir, name 등 변경
    - 아래 명령어를 수정한 후 (이건 지금 내 상황에 맞춰 수정한것) 복사하여 명령어 적용!
    - 아래 명령어는 마지막줄을 보면 알 수 있듯이 restore한다 - 이 내용에 따라 etcd를 설정하기 위해 567을 수행하는 것 
