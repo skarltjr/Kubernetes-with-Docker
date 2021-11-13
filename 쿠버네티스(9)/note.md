@@ -37,7 +37,22 @@
 
 ## 백업 및 복구
 #### 과제
-
+- `kubectl describe pod -n kube-system etcd-nks-master-01.kr-central-1.c.internal`
+- `etcd`정보 확인
+- 이를 토대로 아래 구성하여 백업
+```
+ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+     --name=master \
+     --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key \
+     --data-dir /var/lib/etcd-from-backup \
+     --initial-cluster=master=https://127.0.0.1:2380 \
+     --initial-cluster-token etcd-cluster-1 \
+     --initial-advertise-peer-urls=https://127.0.0.1:2380 \
+     snapshot restore /tmp/snapshot-pre-boot.db
+```
+- 이 후 etcd와 같은 static pod들은 `/etc/kubernetes/manifest`설정 정보에 따라 운용되기때문에 들어가서
+- `vi etcd.yaml`
+- volume path 설정
 
 
 
