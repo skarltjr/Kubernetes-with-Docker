@@ -40,7 +40,7 @@
 - 제공된 백업파일로 복구하기
 - `kubectl describe pod -n kube-system etcd-nks-master-01.kr-central-1.c.internal`
 - `etcd`정보 확인
-- 이를 토대로 아래 구성하여 백업
+- 이를 토대로 아래 구성하여 
 ```
 ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt \
      --name=master \
