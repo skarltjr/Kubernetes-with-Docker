@@ -37,6 +37,7 @@
 
 ## 백업 및 복구
 #### 과제
+- 제공된 백업파일로 복구하기
 - `kubectl describe pod -n kube-system etcd-nks-master-01.kr-central-1.c.internal`
 - `etcd`정보 확인
 - 이를 토대로 아래 구성하여 백업
@@ -55,8 +56,30 @@ ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kuberne
 - volume path 설정
 
 
-
-
+#### 나의 과정
+1. sudo su -
+2. tmp에 복구할 파일 wget으로 받고 // 혹은 실제라면 백업파일을 tmp에 저장해놨다는 상황
+3. `kubectl describe pod -n kube-system etcd-nks-master-01.kr-central-1.c.internal`
+4. 위에서 describe한 내용 맞춰서 아래 작성 ( ex)  --data-dir /var/lib/etcd-kiseok-backup 처럼 따로 공간할당)
+   - 아래는 ip, data-dir, name 등 변경
+   - 아래 명령어를 수정한 후 (이건 지금 내 상황에 맞춰 수정한것) 복사하여 명령어 적용!
+```
+ETCDCTL_API=3 etcdctl --endpoints=https://172.30.4.244:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+     --name=nks-master-01.kr-central-1.c.internal \
+     --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key \
+     --data-dir /var/lib/etcd-kiseok-backup \
+     --initial-cluster=nks-master-01.kr-central-1.c.internal=https://172.30.4.244:2380 \
+     --initial-cluster-token etcd-cluster-1 \
+     --initial-advertise-peer-urls=https://172.30.4.244:2380 \
+     snapshot restore /tmp/snapshot-pre-boot.db
+```
+5. static pod - etcd.yaml volume path 설정 변경을 위해 `/etc/kubernetes/manifest`
+6. etcd 부분에서 --data-dir etcd-kiseok-backup변경
+  - ![화면 캡처 2021-11-14 001006](https://user-images.githubusercontent.com/62214428/141648936-d44dbc97-c596-414c-8f67-cf320b47eeb6.png)
+7. volume 두 부분 /var/lib/etcd-kiseok-backup으로 path 변경
+  - ![화면 캡처 2021-11-14 001026](https://user-images.githubusercontent.com/62214428/141648939-1c55277d-dca1-4676-b817-90ce34d4d4ef.png)
+- ![화면 캡처 2021-11-14 000916](https://user-images.githubusercontent.com/62214428/141648890-c9c7ea7b-f022-4673-9cce-1dfa40a1849d.png)
+- 그랬더니 강사님이 만들어둔 환경으로 동작!!
 
 
 
