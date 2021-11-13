@@ -49,6 +49,11 @@ ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kuberne
      snapshot restore /tmp/snapshot-pre-boot.db
 ```
 
+### 확인 ★
+- 당연히 백업 / 복구 저대로하면 안된다. 왜? 내 환경에 맞는 변수를 적어서 활용해야한다
+- `kubectl describe -n kube-system pod etcd-nks-master-01.kr-central-1.c.internal`로 들어가서 ip, port등 etcd 확인하고 적용
+
+
 
 #### 참고사항
 
