@@ -63,6 +63,7 @@ ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kuberne
 4. 위에서 describe한 내용 맞춰서 아래 작성 ( ex)  --data-dir /var/lib/etcd-kiseok-backup 처럼 따로 공간할당)
    - 아래는 ip, data-dir, name 등 변경
    - 아래 명령어를 수정한 후 (이건 지금 내 상황에 맞춰 수정한것) 복사하여 명령어 적용!
+   - 아래 명령어는 마지막줄을 보면 알 수 있듯이 restore한다 - 이 내용에 따라 etcd를 설정하기 위해 567을 수행하는 것 
 ```
 ETCDCTL_API=3 etcdctl --endpoints=https://172.30.4.244:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt \
      --name=nks-master-01.kr-central-1.c.internal \
@@ -82,6 +83,30 @@ ETCDCTL_API=3 etcdctl --endpoints=https://172.30.4.244:2379 --cacert=/etc/kubern
 - 그랬더니 강사님이 만들어둔 환경으로 동작!!
 
 
+## 정리
+1. 1번 과제는 쿠버네티스의 구조를 파악해볼 수 있었다.
+  - 클러스터와 노드를 연결해주는 것이 무엇일까?
+  - 바로 kubelet이다
+  - kubelet이 작동하지 않으면 pod가 생성되지 않는다
+
+2. 2번 과제는 만약 내가 백업파일을 만들어뒀거나 누군가가 백업파일을 제공했을 때 이를 활용하여 복구할 수 있었다.
+  - 먼저 /tmp 등 위치에 백업파일이 존재하고
+  - `kubectl describe pod -n kube-system etcd-nks-master-01.kr-central-1.c.internal`으로 etcd의 정보를 확인한 후
+  - 이에 맞춰 아래 명령어를 수정한 후 고대로 복사하여 명령어를 입력한다
+```
+ETCDCTL_API=3 etcdctl --endpoints=https://172.30.4.244:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+     --name=nks-master-01.kr-central-1.c.internal \
+     --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key \
+     --data-dir /var/lib/etcd-kiseok-backup \
+     --initial-cluster=nks-master-01.kr-central-1.c.internal=https://172.30.4.244:2380 \
+     --initial-cluster-token etcd-cluster-1 \
+     --initial-advertise-peer-urls=https://172.30.4.244:2380 \
+     snapshot restore /tmp/snapshot-pre-boot.db
+```
+  - 그 후 static pod에 의해 설정되는 etcd를 위해 `/etc/kubernetes/manifest`에서 etcd.yaml에 들어가서
+  - etcd 부분에서 --data-dir 변경
+  - volume 두 부분 /var/lib/etcd-kiseok-backup으로 path 변경
+  - 완료!
 
 
 
