@@ -7,7 +7,7 @@
 - 노드에 taint가 묻어있는 것 같다. 확인을 해보자
 - 동작할 pod가 생성될 곳은 worker / worker describe해보자
 -  ![화면 캡처 2021-11-13 154803](https://user-images.githubusercontent.com/62214428/141609152-95c0b8ab-e394-4361-8ad5-6cfd2100c1a2.png)
-- 앉아서 6시간동안 해본 결과 나는 당연히 taint때문인줄 알고 taint delete를 여러번시도해봤지만 이게 아니였다
+- 앉아서 6시간동안 해본 결과 나는 당연히 taint때문인줄 알고 taint delete | toleration 여러번시도해봤지만 이게 아니였다
 #### 해결법 - 
 ```
 정말 중요한 내용이다. 
