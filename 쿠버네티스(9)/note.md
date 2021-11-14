@@ -81,6 +81,8 @@ ETCDCTL_API=3 etcdctl --endpoints=https://172.30.4.244:2379 --cacert=/etc/kubern
   - ![화면 캡처 2021-11-14 001026](https://user-images.githubusercontent.com/62214428/141648939-1c55277d-dca1-4676-b817-90ce34d4d4ef.png)
 - ![화면 캡처 2021-11-14 000916](https://user-images.githubusercontent.com/62214428/141648890-c9c7ea7b-f022-4673-9cce-1dfa40a1849d.png)
 - 그랬더니 강사님이 만들어둔 환경으로 동작!!
+- 여기서 원래 내 환경으로 돌아가려면 이미 존재했던 etcd로 567 수행하면된다
+   - etcd-kiseok-backup  -> etcd
 
 
 ## 정리
