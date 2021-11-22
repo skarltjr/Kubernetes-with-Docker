@@ -8,4 +8,4 @@
 
 >- Docker : 1~9주차
 >- Kubernetes Admin : 쿠버네티스(1~9)
->- ... 
+>- Application Developer : 쿠버네티스 dev(1~)
