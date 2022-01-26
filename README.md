@@ -10,4 +10,4 @@
 
 - 쿠버네티스 dev 7 : 쿠버네티스와 flask를 활용한 간단한 MSA프로젝트
 - todo : 도커와 쿠버네티스 그리고 스프링부트를 활용한 간단 서비스를 MSA로 만들어보기 
-- [수료증-남기석.pdf](https://github.com/skarltjr/Kubernetes-with-Docker/files/7943569/-.pdf)
+- 약 140명 중 26명 수료 [수료증-남기석.pdf](https://github.com/skarltjr/Kubernetes-with-Docker/files/7943569/-.pdf)
