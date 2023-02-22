@@ -52,9 +52,7 @@
 ```
 즉 control plane에서 관리하지 않기 때문에
 지워져도 replicaset이 다시 생성한다거나 그러지 않는..
-deployment로 관리하지 않는
-
-pod
+deployment로 관리하지 않는 pod
 ```
 - ![화면 캡처 2021-10-27 232927](https://user-images.githubusercontent.com/62214428/139086316-9bfb4fe9-e98a-4ef2-819c-2d391b2fcd45.png)
   - 1번을 통해 접근
@@ -63,6 +61,11 @@ pod
   - 1번 / 2번 / 3번 / 4번 애들이 바로 그 `static pod`들
   - 5번을 봐보자 
   - static pod들은 다른 애들과 다르게 뒤에 이상한 이름이 붙지 않는다.
+
+### 3-1. 왜 필요해?
+- control plane이 관리한다는것은 결국 의도치않은 삭제가 발생할수도있다는것
+- 이런 문제점으로 인해 정적으로 관리한다고 생각.
+
 
 ### 4. 도대체 static pod들은 어떻게 관리되는건가?
 - `kubectl get deployment -A`
