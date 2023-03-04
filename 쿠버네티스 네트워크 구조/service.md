@@ -41,3 +41,11 @@ pod로 넘겨주는것.
 - netfilter는 아 이 서비스로 요청온거는 A쿠베프록시한테 물어보도록 라우팅 되어있으니 10400포트 쿠베프록시에게 접근
 - 쿠베프록시는 이거는 ~로 가라고 알려줘서 pod B에 접근
 
+### 5. 그런데 Kube-proxy가 직접 UserSpace Proxy역할 시 문제점이 존재한다.
+- 모든 패킷을 user-space에서 kernel-space로 변환해야한다.
+
+### 6. Kube-proxy가 Iptables를 통해 netfilter조작하는 역할 시
+- 앞선 문제르 해결하고자 쿠베 프록시가 직접 하나의 proxy 역할을 수행하는게 아니라 모두 netfilter에게 맡긴다.
+- 해당 모드에서 쿠베 프록시는 그저 netfilter의 규칙을 조작할뿐이고
+- service ip를 발견하고 그걸 실제 pod로 전달하는건 모두 netfilter가 담당한다.
+
