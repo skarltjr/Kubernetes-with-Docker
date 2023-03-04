@@ -21,6 +21,10 @@
 3. veth0 : 컨테이너로의 네트워크 접근(in / out)을 수행한다.
   - 하나의 nic로 nic는 시스템마다 갖는 네트워크 연결 장치
 ```
+⭐️ 쿠버네티스에서 이러한 컨테이너에 network interface를 삽입해주는것이 바로 CNI(container network interface)
+- cni를 통해 컨테이너가 생성되면 네트워크 namespace에 새롭게 network interface를 삽입하고 이를 컨테이너에 할당
+- 컨테이너가 삭제되면 해당 network interface 삭제
+- 그 구현체 중 하나가 calico
 
 ### 3. 동일 파드의 컨테이너들은 네트워크를 공유한다?
 ```
