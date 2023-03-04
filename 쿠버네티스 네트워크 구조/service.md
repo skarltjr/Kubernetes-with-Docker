@@ -45,7 +45,22 @@ pod로 넘겨주는것.
 - 모든 패킷을 user-space에서 kernel-space로 변환해야한다.
 
 ### 6. Kube-proxy가 Iptables를 통해 netfilter조작하는 역할 시
+```
 - 앞선 문제르 해결하고자 쿠베 프록시가 직접 하나의 proxy 역할을 수행하는게 아니라 모두 netfilter에게 맡긴다.
 - 해당 모드에서 쿠베 프록시는 그저 netfilter의 규칙을 조작할뿐이고
 - service ip를 발견하고 그걸 실제 pod로 전달하는건 모두 netfilter가 담당한다.
+```
+- 마찬가지로 pod A내 프로세스에서 pod B에 접근하기 위해
+- 먼저 pod B Service Ip에 접근
+- pod A는 `pod B Service Ip`에 대해 몰라서 상위로 넘기고
+- 이때 netfilter가 `pod B Service Ip`를 보고 `아 이건 여기로 가`를 바로 수행
+- 호스트는 정보를 받고 pod B로 바로 접근
+    - 어떻게 가능한가?
+    - 기생성된 파드를 관리하는 컨트롤러 매니저는 새로운 pod가 생성되었거나 replicaset이 생성되었거나 혹은 `pod가 죽어서 새로 생성했는데 그래서 ip도 바뀌었어`등을 알고 관리하는데
+    - 이를 계속 쿠베프록시에게 전달해주고
+    - 쿠베프록시는 그때마다 이를 netfilter에 전달 ( ★ 이 때 netfilter는 커널이라고 했다. 그러니까 `kubeproxy`가 `iptables`를 껴서 정보를 전달하여 netfilter 커널에 반영시키는 것)
+    - 그러니까 결국 kubeproxy도 iptables, netfilter같은 OS와 관련된 것들을 활용하여 변환을 가능하도록한다.
 
+
+### 7. 근데 어떤 service로 가야해?
+- ingress
