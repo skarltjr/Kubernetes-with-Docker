@@ -55,4 +55,11 @@
 - ![01_07](https://user-images.githubusercontent.com/62214428/222890525-b5e07beb-b9b1-49b1-a66b-eca1e94cc8ae.png)
 
 
+### 그런데
+```
+여기에는 문제점이 있다.
+파드는 유동적이다.
+그래서 유동적인 파드에 고정적인 연결을 지원해주는 무언가가 필요하다..
 
+service
+```
