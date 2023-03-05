@@ -1,5 +1,5 @@
 ## pod-pod, pod-service 통신
-- ![image](https://user-images.githubusercontent.com/62214428/222944799-89c72408-3b31-424b-95ea-9851e530740b.png)
+- ![image](https://user-images.githubusercontent.com/62214428/222945798-86a9716f-6a66-48f1-b061-016f463dcc34.png)
 
 ## 외부 - service 통신
 - <img width="728" alt="스크린샷 2023-03-05 오전 3 04 45" src="https://user-images.githubusercontent.com/62214428/222921784-ab06a89b-0799-46a9-b02e-26dbe2164e65.png">
